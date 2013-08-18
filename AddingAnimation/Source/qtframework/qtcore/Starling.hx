@@ -20,6 +20,7 @@ class Starling extends EventDispatcher
 	private var mViewPort:Rectangle;
 	
 	 private var mJuggler:Juggler;
+	 public var juggler (get_juggler, null):Juggler;
 	 private var mStarted:Bool;   
 	 private var mLastFrameTimestamp : Float;
 	

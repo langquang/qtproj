@@ -12,9 +12,13 @@ import flash.text.TextField;
 import motion.easing.Elastic;
 import motion.Actuate;
 import openfl.Assets;
+import qtframework.display.Image;
+import qtframework.display.MovieClips;
 import qtframework.qtanimation.DelayedCall;
 import qtframework.qtcore.Starling;
 import qtframework.events.QTEvent;
+import qtframework.textures.Texture;
+import qtframework.textures.TextureAtlas;
 
 
 class Main extends Sprite {
@@ -25,45 +29,30 @@ class Main extends Sprite {
 		
 		super ();
 		
-
+		var mStarling : Starling = new Starling(stage);
+		mStarling.start();
 		
+		var content = Assets.getBytes("assets/starling.xml");
+		var root = Xml.parse(content.toString()).firstElement();
 		
+		var texture : Texture = new Texture(Assets.getBitmapData("assets/starling.png"));
+		var fast = new haxe.xml.Fast(root);
+		var textatlas : TextureAtlas = new TextureAtlas(texture, fast);
 		
-		var bmData :  BitmapData = Assets.getBitmapData ("assets/B11S2Building.png");
-		var bitmap = new Bitmap ();
-		bitmap.x = - bitmap.width / 2;
-		bitmap.y = - bitmap.height / 2;
-		bitmap.smoothing = true;
+		var frame1 : Texture = textatlas.getTexture("Symbol 10000");
 		
-		var container = new Sprite ();
-		container.addChild (bitmap);
-		container.x = stage.stageWidth / 2;
-		container.y = stage.stageHeight / 2;
+/*		var bitmap : Image = new Image(frame1);
+		bitmap.x = 200;
+		bitmap.y = 200;
+		addChild(bitmap);*/
 		
-		addChild (container);
+		var frames : Array<Texture> = textatlas.getTextures("Symbol");
+		var mc : MovieClips = new MovieClips(frames,1);
+		mc.x = 200;
+		mc.y = 200;
+		addChild(mc);
 		
-		tf  = new TextField();
-		tf.text = "Butin";
-		addChild(tf);
-		
-		var filter : GlowFilter = new GlowFilter(0xff0000, 1,10,10,5);
-
-		var bmFilter = new BitmapData(bmData.width, bmData.height);
-		bmFilter.applyFilter(bmData, bmData.rect, new Point(0, 0), filter);
-		
-		bitmap.bitmapData  = bmFilter;
-		
-
-		
-		//stage.addEventListener(Event.ENTER_FRAME, onEnterFrame);
-		
-	var mStarling : Starling = new Starling(stage);
-	mStarling.start();
-	var delay : DelayedCall = mStarling.get_juggler().delayCall(delay3s, 1, null);
-	delay.set_repeatCount(2);
-	
-	delay.addEventListener(QTEvent.REMOVE_FROM_JUGGLER, onRemove);
-		
+		mStarling.juggler.add(mc);
 	}
 	
 	private function onEnterFrame(event:Event):Void
