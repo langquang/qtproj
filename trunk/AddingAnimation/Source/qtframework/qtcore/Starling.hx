@@ -7,6 +7,7 @@ import flash.events.Event;
 import flash.events.KeyboardEvent;
 import flash.events.ErrorEvent;
 import qtframework.qtanimation.Juggler;
+import qtframework.resources.ResourceManager;
 
 /**
  * ...
@@ -21,6 +22,10 @@ class Starling extends EventDispatcher
 	
 	 private var mJuggler:Juggler;
 	 public var juggler (get_juggler, null):Juggler;
+	 
+	 private var mResources : ResourceManager;
+	 public var resources(get_resources, null):ResourceManager;
+	 
 	 private var mStarted:Bool;   
 	 private var mLastFrameTimestamp : Float;
 	
@@ -38,6 +43,7 @@ class Starling extends EventDispatcher
 		mViewPort = new Rectangle(0, 0, stage.stageWidth, stage.stageHeight);
 		
 		mJuggler = new Juggler();
+		mResources = new ResourceManager();
 		mLastFrameTimestamp = getSecond();
 		// register other event handlers
 		stage.addEventListener(Event.ENTER_FRAME, onEnterFrame);
@@ -117,6 +123,11 @@ class Starling extends EventDispatcher
         
         /** The default juggler of this instance. Will be advanced once per frame. */
         public function get_juggler():Juggler { return mJuggler; }
+		
+		  /** The default resource Manager*/
+        public function get_resources():ResourceManager { return mResources; }
+		
+		
 		
 		// return in second
 		private function getSecond()  : Float

@@ -1,6 +1,8 @@
 package qtframework.textures;
 import flash.geom.Rectangle;
+import flash.utils.ByteArray;
 import haxe.xml.Fast;
+import qtframework.utils.Util;
 /**
  * ...
  * @author butin
@@ -10,14 +12,14 @@ class TextureAtlas
 	private var mAtlasTexture:Texture;
 	private var mTextureRegions:Map<String, Rectangle>;
 	private var mTextureFrames:Map<String, Rectangle>;
-	public function new(texture:Texture, atlasXml:Fast=null) 
+	public function new(texture:Texture, buff:ByteArray) 
 	{
 		mTextureRegions = new Map<String, Rectangle>();
 		mTextureFrames  = new Map<String, Rectangle>();
 		mAtlasTexture   = texture;
 		
-		if (atlasXml != null)
-			parseAtlasXml(atlasXml);
+		if (buff != null)
+			parseDescription(buff);
 	}
 	
 	  /** Disposes the atlas texture. */
@@ -26,37 +28,37 @@ class TextureAtlas
 		mAtlasTexture.dispose();
 	}
 	
-	 /** This function is called by the constructor and will parse an XML in Starling's 
-         *  default atlas file format. Override this method to create custom parsing logic
-         *  (e.g. to support a different file format). */
-	private function parseAtlasXml(atlasXml:Fast):Void
+	private function parseDescription(buff:ByteArray):Void
 	{
-		
-		for( subTexture in atlasXml.nodes.SubTexture ) 
+		var name : String = "";
+		var x:Float           = 0;
+		var y:Float           = 0;
+		var width:Float       = 0;
+		var height:Float      = 0;		
+		var frameX:Float  = 0;
+		var frameY:Float = 0;
+		var frameWidth:Float = 0;
+		var frameHeight:Float = 0;
+		var num : Int = buff.readShort();
+		for (i in 0...num)
 		{
-			var name:String        = subTexture.att.name;
-			var x:Float           = Std.parseFloat(subTexture.att.x);
-			var y:Float           = Std.parseFloat(subTexture.att.y);
-			var width:Float       = Std.parseFloat(subTexture.att.width);
-			var height:Float      = Std.parseFloat(subTexture.att.height);
+			//name  = Util.readString(buff);
+			name = buff.readUTF();
+			trace(name);
+			x = buff.readShort();
+			y = buff.readShort();
+			width = buff.readShort();
+			height  = buff.readShort();			
+			frameX  = buff.readShort();
+			frameY = buff.readShort();
+			frameWidth = buff.readShort();
+			frameHeight = buff.readShort();
 			
-			var frameX:Float  = 0;
-			var frameY:Float = 0;
-			var frameWidth:Float = 0;
-			var frameHeight:Float = 0;
-			if( subTexture.has.frameX )
-				frameX      = Std.parseFloat(subTexture.att.frameX);
-			if( subTexture.has.frameY )
-				frameY      = Std.parseFloat(subTexture.att.frameY);
-			if( subTexture.has.frameWidth )
-				frameWidth  = Std.parseFloat(subTexture.att.frameWidth);
-			if( subTexture.has.frameHeight )
-				frameHeight = Std.parseFloat(subTexture.att.frameHeight);
-			
+			trace("x =" + x + ",y=" + y +",w=" + width +",h=" + height);
+
 			var region:Rectangle = new Rectangle(x, y, width, height);
-			var frame:Rectangle  = frameWidth > 0 && frameHeight > 0 ?
-					new Rectangle(frameX, frameY, frameWidth, frameHeight) : null;
-			
+			var frame:Rectangle  = frameWidth > 0 && frameHeight > 0 ? new Rectangle(frameX, frameY, frameWidth, frameHeight) : null;
+
 			addRegion(name, region, frame);
 		}
 	}
@@ -66,7 +68,10 @@ class TextureAtlas
 	{
 		var region:Rectangle = mTextureRegions[name];
 		
-		if (region == null) return null;
+		if (region == null) {
+			trace("[TextureAtlas] There is no Texture of  \"" + name + "\"");
+			return null;
+		}
 		else return Texture.fromTexture(mAtlasTexture, region, mTextureFrames[name]);
 	}
 	
@@ -95,8 +100,8 @@ class TextureAtlas
 	
 	private function compareSubTextureIndex(str1 : String, str2 : String) : Int
 	{
-		var  t1 : Int = Std.parseInt(str1.substr(str1.length - 5, 5));
-		var t2  : Int= Std.parseInt(str2.substr(str2.length - 5, 5));
+		var  t1 : Int = Std.parseInt(str1.substr(str1.length - 4, 4));
+		var t2  : Int= Std.parseInt(str2.substr(str2.length - 4, 4));
 		return t1 - t2;
 	}
 	

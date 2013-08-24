@@ -9,9 +9,11 @@ import flash.filters.GlowFilter;
 import flash.geom.Point;
 import flash.events.Event;
 import flash.text.TextField;
+import flash.utils.ByteArray;
 import motion.easing.Elastic;
 import motion.Actuate;
 import openfl.Assets;
+import openfl.display.FPS;
 import qtframework.display.Image;
 import qtframework.display.MovieClips;
 import qtframework.qtanimation.DelayedCall;
@@ -29,36 +31,32 @@ class Main extends Sprite {
 		
 		super ();
 		
+		var tfFPS : FPS = new FPS();
+		addChild(tfFPS);
+		
 		var mStarling : Starling = new Starling(stage);
 		mStarling.start();
 		
-		var content = Assets.getBytes("assets/starling.xml");
-		var root = Xml.parse(content.toString()).firstElement();
+		trace(mStarling.resources);
 		
-		var texture : Texture = new Texture(Assets.getBitmapData("assets/starling.png"));
-		var fast = new haxe.xml.Fast(root);
-		var textatlas : TextureAtlas = new TextureAtlas(texture, fast);
+		for (i in 0...100)
+		{
+			var frames : Array<Texture> = mStarling.resources.getSequenceFrame("rada","Rada");
+			var mc : MovieClips = new MovieClips(frames,24);
+			mc.x =  Math.random()*600.0;
+			mc.y =  Math.random() * 800.0;
+			addChild(mc);
+			
+			//mStarling.juggler.add(mc);
+		}
+
 		
-		var frame1 : Texture = textatlas.getTexture("Symbol 10000");
-		
-/*		var bitmap : Image = new Image(frame1);
-		bitmap.x = 200;
-		bitmap.y = 200;
-		addChild(bitmap);*/
-		
-		var frames : Array<Texture> = textatlas.getTextures("Symbol");
-		var mc : MovieClips = new MovieClips(frames,1);
-		mc.x = 200;
-		mc.y = 200;
-		addChild(mc);
-		
-		mStarling.juggler.add(mc);
+		addEventListener(Event.ENTER_FRAME, onEnterFrame);
 	}
 	
 	private function onEnterFrame(event:Event):Void
-	{
-		var t1 : Int = flash.Lib.getTimer();
-		tf.text = Std.string(t1);
+	{	
+		trace("butin");
 	}
 	
 	private var count : Int = 0;
