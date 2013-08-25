@@ -34,7 +34,6 @@ class ResourceManager
 	
 	public function getSequenceFrame(pack : String, refix : String): Array<Texture> 
 	{
-		trace("pack=" + pack +", refix=" + refix);
 		var atlas : TextureAtlas = getPack(pack);
 		if ( atlas != null )
 		{

@@ -206,8 +206,14 @@ class MovieClips extends Image implements IAnimatable
 			}
 		}
 		
-		if (mCurrentFrame != previousFrame)
+	if (mCurrentFrame != previousFrame)
+	{
+		#if  flash
 			mBitmap.bitmapData = mTextures[mCurrentFrame].mBitmapData;
+		#else
+			mTexture = mTextures[mCurrentFrame];		
+		#end
+	}
 	}
 	
 	/** Indicates if a (non-looping) movie has come to its end. */
