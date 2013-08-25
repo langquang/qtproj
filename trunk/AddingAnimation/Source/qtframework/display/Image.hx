@@ -57,7 +57,7 @@ class Image extends Sprite
 			uvt[4] = 0.0; uvt[5] = 0.0;
 			uvt[6] = 1.0; uvt[7] = 0.0;
 
-			addEventListener(Event.ENTER_FRAME, onEnterFrame);
+			//addEventListener(Event.ENTER_FRAME, onEnterFrame);
 			#end
 		}
 		else

@@ -1,4 +1,6 @@
 package qtframework.display;
+import flash.events.Event;
+import flash.Lib;
 import qtframework.qtanimation.IAnimatable;
 import qtframework.textures.Texture;
 import qtframework.events.QTEvent;
@@ -21,6 +23,9 @@ class MovieClips extends Image implements IAnimatable
 	public var numFrames(get_numFrames, null) : Int;
 	public var currentFrame(get_currentFrame, set_currentFrame) : Int;
 	
+	private var m_LastTime : Float = 0;
+	private var m_CurTime : Float = 0;
+	
 	 /** Creates a movie clip from the provided textures and with the specified default framerate.*/  
 	public function new(textures:Array<Texture>, fps:Float=12) 
 	{
@@ -33,6 +38,7 @@ class MovieClips extends Image implements IAnimatable
 		{
 			throw("Empty texture array");
 		}
+		m_LastTime  = Lib.getTimer()/1000.0;
 	}
 	
 	private function init(textures:Array<Texture>, fps:Float):Void
@@ -55,6 +61,8 @@ class MovieClips extends Image implements IAnimatable
 			mDurations[i] = mDefaultFrameDuration;
 			mStartTimes[i] = i * mDefaultFrameDuration;
 		}
+		
+		addEventListener(Event.ENTER_FRAME, onEnterFrame);
 	}
 	
 	// frame manipulation
@@ -161,7 +169,26 @@ class MovieClips extends Image implements IAnimatable
 	}
 	
 	// IAnimatable
-	
+	#if !flash
+	override public function onEnterFrame(event : Event):Void
+	{
+		//m_CurTime =  Lib.getTimer()/1000.0;
+		//var delta : Float = m_CurTime - m_LastTime;
+		//advanceTime(delta);
+		//m_LastTime = m_CurTime;
+		//super.onEnterFrame(event);
+
+	}
+	#else
+	 public function onEnterFrame(event : Event):Void
+	{
+		m_CurTime =  Lib.getTimer()/1000.0;
+		var delta : Float = m_CurTime - m_LastTime;
+		advanceTime(delta);
+		m_LastTime = m_CurTime;		
+		
+	}
+	#end
 	/** @inheritDoc */
 	public function advanceTime(passedTime:Float):Void
 	{
@@ -206,14 +233,15 @@ class MovieClips extends Image implements IAnimatable
 			}
 		}
 		
-	if (mCurrentFrame != previousFrame)
-	{
-		#if  flash
-			mBitmap.bitmapData = mTextures[mCurrentFrame].mBitmapData;
-		#else
-			mTexture = mTextures[mCurrentFrame];		
-		#end
-	}
+		if (mCurrentFrame != previousFrame)
+		{
+			#if  flash
+				mBitmap.bitmapData = mTextures[mCurrentFrame].mBitmapData;
+			#else
+				mTexture = mTextures[mCurrentFrame];		
+			#end
+		}
+		draw();
 	}
 	
 	/** Indicates if a (non-looping) movie has come to its end. */
