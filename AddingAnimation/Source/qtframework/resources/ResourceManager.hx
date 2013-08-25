@@ -1,6 +1,7 @@
 package qtframework.resources;
 import flash.display.BitmapData;
 import flash.utils.ByteArray;
+import flash.Vector.Vector;
 import openfl.Assets;
 import qtframework.textures.Texture;
 import qtframework.textures.TextureAtlas;
@@ -32,12 +33,22 @@ class ResourceManager
 		return null;
 	}
 	
-	public function getSequenceFrame(pack : String, refix : String): Array<Texture> 
+	public function getSequenceFrame(pack : String, refix : String): Vector<Texture> 
 	{
 		var atlas : TextureAtlas = getPack(pack);
 		if ( atlas != null )
 		{
 			return atlas.getTextures(refix);
+		}
+		return null;
+	}
+	
+	public function getSequenceBitmapData(pack : String, refix : String): Vector<BitmapData> 
+	{
+		var atlas : TextureAtlas = getPack(pack);
+		if ( atlas != null )
+		{
+			return atlas.getBitmapDatas(refix);
 		}
 		return null;
 	}

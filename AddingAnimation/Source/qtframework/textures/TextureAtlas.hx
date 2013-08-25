@@ -1,8 +1,10 @@
 package qtframework.textures;
 import flash.geom.Rectangle;
 import flash.utils.ByteArray;
+import flash.Vector.Vector;
 import haxe.xml.Fast;
 import qtframework.utils.Util;
+import flash.display.BitmapData;
 /**
  * ...
  * @author butin
@@ -73,9 +75,9 @@ class TextureAtlas
 	
 	 /** Returns all textures that start with a certain string, sorted alphabetically
          *  (especially useful for "MovieClip"). */
-	public function getTextures(prefix:String=""):Array<Texture>
+	public function getTextures(prefix:String=""):Vector<Texture>
 	{
-		var textures:Array<Texture> = new Array<Texture>();
+		var textures:Vector<Texture> = new Vector<Texture>();
 		var names:Array<String> = new Array<String>();
 				
 		for ( name in mTextureRegions.keys() ) 
@@ -89,6 +91,27 @@ class TextureAtlas
 		for (i in 0...names.length)
 		{
 			textures.push(getTexture(names[i])); 
+		}
+		
+		return textures;
+	}
+	
+	public function getBitmapDatas(prefix:String=""):Vector<BitmapData>
+	{
+		var textures:Vector<BitmapData> = new Vector<BitmapData>();
+		var names:Array<String> = new Array<String>();
+				
+		for ( name in mTextureRegions.keys() ) 
+		{
+		  		if (name.indexOf(prefix) == 0)                
+					names.push(name);      
+		}
+		
+		names.sort(compareSubTextureIndex);	
+			
+		for (i in 0...names.length)
+		{
+			textures.push(getTexture(names[i]).mBitmapData); 
 		}
 		
 		return textures;
