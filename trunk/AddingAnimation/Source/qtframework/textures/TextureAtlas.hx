@@ -44,7 +44,6 @@ class TextureAtlas
 		{
 			//name  = Util.readString(buff);
 			name = buff.readUTF();
-			trace(name);
 			x = buff.readShort();
 			y = buff.readShort();
 			width = buff.readShort();
@@ -53,9 +52,6 @@ class TextureAtlas
 			frameY = buff.readShort();
 			frameWidth = buff.readShort();
 			frameHeight = buff.readShort();
-			
-			trace("x =" + x + ",y=" + y +",w=" + width +",h=" + height);
-
 			var region:Rectangle = new Rectangle(x, y, width, height);
 			var frame:Rectangle  = frameWidth > 0 && frameHeight > 0 ? new Rectangle(frameX, frameY, frameWidth, frameHeight) : null;
 

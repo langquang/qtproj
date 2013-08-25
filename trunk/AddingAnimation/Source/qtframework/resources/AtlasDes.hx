@@ -19,19 +19,15 @@ class AtlasDes
 	
 	public  function load( ):Void
 	{
-		trace("AtlasDesc Load");
 		mPacks = new Map<String, ByteArray>();
 		var buff : ByteArray = Assets.getBytes(ResourceDefine.ATLAS_DESC);
 		buff.endian = Endian.BIG_ENDIAN;
 		var nPack : Int = buff.readShort();
-		trace(nPack);
 		while (nPack > 0)
 		{
 			var name : String = Util.readString(buff);
 			name = name.split(".")[0];
-			trace(name);
 			var num : Int = buff.readShort();
-			trace(num);
 			var data : ByteArray = new ByteArray();
 			var module : String = "";
 			var x:Int           = 0;
@@ -49,7 +45,6 @@ class AtlasDes
 			for (i in 0...num)
 			{
 				module  = Util.readString(buff);
-				trace(module);
 				x = buff.readShort();
 				y = buff.readShort();
 				width = buff.readShort();

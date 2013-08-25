@@ -34,20 +34,28 @@ class Main extends Sprite {
 		var tfFPS : FPS = new FPS();
 		addChild(tfFPS);
 		
+		var tf : TextField = new TextField();
+			#if  flash
+			tf.text = "flash";
+			#else
+			tf.text = "other";
+			#end
+				
+				
+		addChild(tf);
+		
 		var mStarling : Starling = new Starling(stage);
 		mStarling.start();
-		
-		trace(mStarling.resources);
 		
 		for (i in 0...100)
 		{
 			var frames : Array<Texture> = mStarling.resources.getSequenceFrame("rada","Rada");
 			var mc : MovieClips = new MovieClips(frames,24);
-			mc.x =  Math.random()*600.0;
+			mc.x =  Math.random()*600.0 + 100;
 			mc.y =  Math.random() * 800.0;
 			addChild(mc);
 			
-			//mStarling.juggler.add(mc);
+			mStarling.juggler.add(mc);
 		}
 
 		
@@ -56,7 +64,7 @@ class Main extends Sprite {
 	
 	private function onEnterFrame(event:Event):Void
 	{	
-		trace("butin");
+		//trace("butin");
 	}
 	
 	private var count : Int = 0;
