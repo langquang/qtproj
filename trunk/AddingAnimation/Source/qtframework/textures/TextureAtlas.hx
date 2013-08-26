@@ -1,10 +1,8 @@
 package qtframework.textures;
 import flash.geom.Rectangle;
 import flash.utils.ByteArray;
-import flash.Vector.Vector;
 import haxe.xml.Fast;
 import qtframework.utils.Util;
-import flash.display.BitmapData;
 /**
  * ...
  * @author butin
@@ -14,10 +12,13 @@ class TextureAtlas
 	private var mAtlasTexture:Texture;
 	private var mTextureRegions:Map<String, Rectangle>;
 	private var mTextureFrames:Map<String, Rectangle>;
+	private var mListTextures:Map<String, Texture>;
+	
 	public function new(texture:Texture, buff:ByteArray) 
 	{
 		mTextureRegions = new Map<String, Rectangle>();
 		mTextureFrames  = new Map<String, Rectangle>();
+		mListTextures  = new Map<String, Texture>();
 		mAtlasTexture   = texture;
 		
 		if (buff != null)
@@ -28,6 +29,14 @@ class TextureAtlas
 	public function dispose():Void
 	{
 		mAtlasTexture.dispose();
+		var subTexture : Texture = null;
+		for ( name in mListTextures.keys() ) 
+		{
+			subTexture = mListTextures[name];
+			subTexture.dispose();
+		}
+		mTextureRegions = null;
+		mTextureFrames = null;
 	}
 	
 	private function parseDescription(buff:ByteArray):Void
@@ -54,6 +63,8 @@ class TextureAtlas
 			frameY = buff.readShort();
 			frameWidth = buff.readShort();
 			frameHeight = buff.readShort();
+			
+
 			var region:Rectangle = new Rectangle(x, y, width, height);
 			var frame:Rectangle  = frameWidth > 0 && frameHeight > 0 ? new Rectangle(frameX, frameY, frameWidth, frameHeight) : null;
 
@@ -64,20 +75,33 @@ class TextureAtlas
 	/** Retrieves a subtexture by name. Returns <code>null</code> if it is not found. */
 	public function getTexture(name:String):Texture
 	{
-		var region:Rectangle = mTextureRegions[name];
-		
-		if (region == null) {
-			trace("[TextureAtlas] There is no Texture of  \"" + name + "\"");
-			return null;
+		if ( mListTextures[name] != null )	// get from cache
+		{
+			return mListTextures[name];
 		}
-		else return Texture.fromTexture(mAtlasTexture, region, mTextureFrames[name]);
+		else		// create new Texture						
+		{
+			var region:Rectangle = mTextureRegions[name];
+		
+			if (region == null) {
+				throw("[TextureAtlas] There is no Texture of  \"" + name + "\"");
+				return null;
+			}
+			else 
+			{
+				var texture : Texture = Texture.fromTexture(mAtlasTexture, region, mTextureFrames[name]);
+				mListTextures[name] = texture;
+				return texture;
+			}
+		}
+
 	}
 	
 	 /** Returns all textures that start with a certain string, sorted alphabetically
          *  (especially useful for "MovieClip"). */
-	public function getTextures(prefix:String=""):Vector<Texture>
+	public function getTextures(prefix:String=""):Array<Texture>
 	{
-		var textures:Vector<Texture> = new Vector<Texture>();
+		var textures:Array<Texture> = new Array<Texture>();
 		var names:Array<String> = new Array<String>();
 				
 		for ( name in mTextureRegions.keys() ) 
@@ -91,27 +115,6 @@ class TextureAtlas
 		for (i in 0...names.length)
 		{
 			textures.push(getTexture(names[i])); 
-		}
-		
-		return textures;
-	}
-	
-	public function getBitmapDatas(prefix:String=""):Vector<BitmapData>
-	{
-		var textures:Vector<BitmapData> = new Vector<BitmapData>();
-		var names:Array<String> = new Array<String>();
-				
-		for ( name in mTextureRegions.keys() ) 
-		{
-		  		if (name.indexOf(prefix) == 0)                
-					names.push(name);      
-		}
-		
-		names.sort(compareSubTextureIndex);	
-			
-		for (i in 0...names.length)
-		{
-			textures.push(getTexture(names[i]).mBitmapData); 
 		}
 		
 		return textures;

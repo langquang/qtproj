@@ -3,8 +3,7 @@
 	
 	<meta title="Adding Animation" package="org.openfl.samples.addinganimation" version="1.0.0" company="OpenFL Technologies" />
 	<app main="Main" path="Export" file="AddingAnimation" />
-	<set name="USE_GRAPHIC" />
-	<window width="800" height="600" background="#FFFFFF" fps="100" />
+	<window width="640" height="480" background="#FFFFFF" fps="100" />
 	
 	<source path="Source" />
 	

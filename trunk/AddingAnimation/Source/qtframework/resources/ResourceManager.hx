@@ -1,7 +1,6 @@
 package qtframework.resources;
 import flash.display.BitmapData;
 import flash.utils.ByteArray;
-import flash.Vector.Vector;
 import openfl.Assets;
 import qtframework.textures.Texture;
 import qtframework.textures.TextureAtlas;
@@ -16,11 +15,13 @@ class ResourceManager
 	private var mAtlasDesc : AtlasDes;
 	private var mDefaultTexture : Texture;
 	private var mPacks :Map<String, TextureAtlas>;
+	private var mAtlasRef:Map<String, Int>;
 	
 	public function new() 
 	{
 		mAtlasDesc = new AtlasDes();
 		mPacks = new Map<String, TextureAtlas>();
+		mAtlasRef = new Map<String, Int>();
 	}
 	
 	public function getFrame(pack : String, name : String):Texture
@@ -28,27 +29,18 @@ class ResourceManager
 		var atlas : TextureAtlas = getPack(pack);
 		if ( atlas != null )
 		{
+			incReference(pack);
 			return atlas.getTexture(name);
 		}
 		return null;
 	}
 	
-	public function getSequenceFrame(pack : String, refix : String): Vector<Texture> 
+	public function getSequenceFrame(pack : String, refix : String): Array<Texture> 
 	{
 		var atlas : TextureAtlas = getPack(pack);
 		if ( atlas != null )
 		{
 			return atlas.getTextures(refix);
-		}
-		return null;
-	}
-	
-	public function getSequenceBitmapData(pack : String, refix : String): Vector<BitmapData> 
-	{
-		var atlas : TextureAtlas = getPack(pack);
-		if ( atlas != null )
-		{
-			return atlas.getBitmapDatas(refix);
 		}
 		return null;
 	}
@@ -67,14 +59,49 @@ class ResourceManager
 			if ( desc != null && bm != null ){
 				var atlas : TextureAtlas = new TextureAtlas(texture, desc);
 				mPacks[name] = atlas;
+				//free mem
+				bm.dispose();
+				bm = null;
 				return atlas;
 			}
 			else {
-				trace("[ResourceManager] There is no Pack  of \"" + name + "\"");				
+				throw("[ResourceManager] There is no Pack  of \"" + name + "\"");				
 			}					
 		}
 		return null;
-	
 	}
 	
+	private function incReference(pack : String):Int
+	{
+		var count : Int  = 0;
+		if ( mAtlasRef[pack] != null ) {
+			count = mAtlasRef[pack] ;
+			count++;
+			mAtlasRef.set(pack, count);
+		}else {
+			mAtlasRef.set(pack, 0);
+		}
+		return mAtlasRef[pack];
+	}
+	
+	private function decReference(pack : String):Int
+	{
+		var count : Int  = 0;
+		if ( mAtlasRef[pack] != null ) {
+			count = mAtlasRef[pack] ;
+			count--;
+			if ( count <= 0 ) {
+				var atlas : TextureAtlas = getPack(pack);
+				atlas.dispose();
+			}	
+			mAtlasRef.set(pack, 0);
+
+		}
+		return mAtlasRef[pack];
+	}
+	
+	public function release( pack : String ):Int
+	{
+		return decReference(pack);
+	}
 }
