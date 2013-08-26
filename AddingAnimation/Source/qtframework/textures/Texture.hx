@@ -41,6 +41,8 @@ class Texture
 	public function dispose():Void
 	{ 
 		mBitmapData.dispose();
+		mFrame = null;
+		mClipping = null;
 	}
 	
 	/** The clipping rectangle, which is the region provided on initialization 

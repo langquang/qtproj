@@ -77,7 +77,7 @@ class AtlasDes
 		if ( mPacks[name]  != null)
 			return mPacks[name];
 		else
-			trace("[AtlasDes] There is no Pack description of \"" + name + "\"");
+			throw("[AtlasDes] There is no Pack description of \"" + name + "\"");
 		return null;
 	}
 	

@@ -1,4 +1,5 @@
 package qtframework.qtcore;
+import flash.display.DisplayObject;
 import flash.display.Sprite;
 import flash.display.Stage;
 import flash.events.EventDispatcher;
@@ -17,7 +18,7 @@ class Starling extends EventDispatcher
 {
 	inline private static var VERSION:String = "1.2";
 	private var mNativeStage:Stage;
-	private var mNativeOverlay:Sprite;
+	private var mMainGame:Game;
 	private var mViewPort:Rectangle;
 	
 	 private var mJuggler:Juggler;
@@ -29,17 +30,19 @@ class Starling extends EventDispatcher
 	 private var mStarted:Bool;   
 	 private var mLastFrameTimestamp : Float;
 	
-	private static var sCurrent:Starling;
+	public  static var sCurrent(get_sCurrent, null):Starling;
     private static var sHandleLostContext:Bool;
 		
-	public function new( stage:Stage) 
+	private function new( stage:Stage, mainGame: Game) 
 	{
 		super();
 		if (stage == null) throw ("Stage must not be null");
 		
-		mNativeOverlay = new Sprite();
 		mNativeStage = stage;
-		mNativeStage.addChild(mNativeOverlay);
+		mMainGame = mainGame;
+		mNativeStage.addChild(mMainGame);
+		
+
 		mViewPort = new Rectangle(0, 0, stage.stageWidth, stage.stageHeight);
 		
 		mJuggler = new Juggler();
@@ -71,9 +74,10 @@ class Starling extends EventDispatcher
 	 *  frame. (Except when <code>shareContext</code> is enabled: in that case, you have to
 	 *  call that method manually.) */
         public function start():Void 
-        { 
+        { 		
             mStarted = true; 
             mLastFrameTimestamp = getSecond();
+			mMainGame.gameInit();
         }
         
         /** Stops rendering. */
@@ -86,7 +90,10 @@ class Starling extends EventDispatcher
         {
 			//trace("onEnterFrame");
             if (mStarted ) 
-                nextFrame();
+			{
+				nextFrame();
+				mMainGame.gameUpdate();
+			}
         }
         
         private function onKey(event:KeyboardEvent):Void
@@ -127,6 +134,16 @@ class Starling extends EventDispatcher
 		  /** The default resource Manager*/
         public function get_resources():ResourceManager { return mResources; }
 		
+		public static  function get_sCurrent():Starling
+		{
+			return sCurrent;
+		}
+		
+		public static function create(stage:Stage, mainGame: Game) : Starling
+		{
+			sCurrent = new Starling(stage, mainGame);
+			return sCurrent;
+		}
 		
 		
 		// return in second
