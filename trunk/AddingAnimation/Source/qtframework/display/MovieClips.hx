@@ -1,4 +1,8 @@
 package qtframework.display;
+import flash.display.BitmapData;
+import flash.filters.GlowFilter;
+import flash.geom.Point;
+import flash.Vector.Vector;
 import qtframework.qtanimation.IAnimatable;
 import qtframework.textures.Texture;
 import qtframework.events.QTEvent;
@@ -9,6 +13,7 @@ import qtframework.events.QTEvent;
 class MovieClips extends Image implements IAnimatable
 {
 	private var mTextures:Array<Texture>;
+	private var mTextureFilters:Array<Texture>;
 	private var mDurations:Array<Float>;
 	private var mStartTimes:Array<Float>;
 
@@ -20,6 +25,7 @@ class MovieClips extends Image implements IAnimatable
 	private var mPlaying:Bool;
 	public var numFrames(get_numFrames, null) : Int;
 	public var currentFrame(get_currentFrame, set_currentFrame) : Int;
+
 	
 	 /** Creates a movie clip from the provided textures and with the specified default framerate.*/  
 	public function new(textures:Array<Texture>, fps:Float=12) 
@@ -74,6 +80,12 @@ class MovieClips extends Image implements IAnimatable
 		
 		mTextures.insert(frameID, texture);
 		mDurations.insert(frameID, duration);
+		if ( isFilter == true )
+		{
+			var filterData : BitmapData = createBitmapFilter(mCurrentFilter, mTextures[frameID]);
+			mFilterTexture = new Texture(filterData, false);
+			mTextureFilters.insert(frameID, mFilterTexture);
+		}
 		mTotalTime += duration;
 		
 		if (frameID > 0 && frameID == numFrames) 
@@ -91,6 +103,9 @@ class MovieClips extends Image implements IAnimatable
 		mTotalTime -= getFrameDuration(frameID);
 		mTextures.splice(frameID, 1);
 		mDurations.splice(frameID, 1);
+		if ( isFilter == true  )
+			mTextureFilters.splice(frameID, 1);
+		
 		
 		updateStartTimes();
 	}
@@ -207,7 +222,12 @@ class MovieClips extends Image implements IAnimatable
 		}
 		
 		if (mCurrentFrame != previousFrame)
-			mBitmap.bitmapData = mTextures[mCurrentFrame].mBitmapData;
+		{
+			if( isFilter == false )
+				mBitmap.bitmapData = mTextures[mCurrentFrame].mBitmapData;
+			else
+				mBitmap.bitmapData = mTextureFilters[mCurrentFrame].mBitmapData;
+		}
 	}
 	
 	/** Indicates if a (non-looping) movie has come to its end. */
@@ -268,5 +288,31 @@ class MovieClips extends Image implements IAnimatable
 		else
 			return false;
 	}
+	
+	override public function setGlowFilter(color : UInt = 16711680, alpha : Float = 1, blurX : Float = 6, blurY : Float = 6, strength : Float = 4, quality : Int = 1, inner : Bool = false, knockout : Bool = false):Void
+	{
+		mTextureFilters = new Array<Texture>();
+		mCurrentFilter = new GlowFilter(color, alpha, blurX, blurY, strength, quality, inner, knockout);
+		for ( i in 0...numFrames)
+		{
+			var filterData : BitmapData = createBitmapFilter(mCurrentFilter, mTextures[i]);
+			mFilterTexture = new Texture(filterData, false);
+			mTextureFilters.push(mFilterTexture);
+
+		}
+		mBitmap.bitmapData = mTextureFilters[mCurrentFrame].mBitmapData;
+
+		isFilter = true;
+	}
+	
+	override public function clearGlowFilter():Void
+	{
+		for ( i in 0...numFrames) mTextureFilters[i].dispose();		
+		mBitmap.bitmapData = mTexture.mBitmapData;
+		mTextureFilters = null;
+		isFilter = false;
+	}
+	
+
 	
 }
