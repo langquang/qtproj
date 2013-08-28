@@ -13,13 +13,19 @@ class Texture
 
 	public  var mFrame(get_mFrame, null):Rectangle;
 	public  var mBitmapData(default, null) : BitmapData;
-	private var mClipping:Rectangle;
+	public var mClipping(default, null):Rectangle;
 	
-	public function new(data:BitmapData) 
+	public function new(data:BitmapData, isCache : Bool = true) 
 	{
-		mClipping = data.rect.clone();
-		mBitmapData =  new BitmapData(cast mClipping.width,  cast mClipping.height, true, 0);
-		mBitmapData.copyPixels(data, mClipping, new Point(0, 0));
+		if ( isCache == true ) {
+			mClipping = data.rect.clone();
+			mBitmapData =  new BitmapData(cast mClipping.width,  cast mClipping.height, true, 0);
+			mBitmapData.copyPixels(data, mClipping, new Point(0, 0));
+		}else {
+			mClipping = data.rect;
+			mBitmapData = data;
+		}
+
 	}
 	
 	public static function fromTexture(parentTexture:Texture, region:Rectangle, frame : Rectangle = null)
@@ -50,10 +56,10 @@ class Texture
 	public function get_clipping():Rectangle { return mClipping.clone(); }
 
 	/** @inheritDoc */
-	public  function get_width():Float { return mClipping.width; }
+	public  function get_width():Int { return cast mClipping.width; }
 
 	/** @inheritDoc */
-	public  function get_height():Float { return mClipping.height; }
+	public  function get_height():Int { return cast mClipping.height; }
 	
 	public function get_mFrame():Rectangle 
 	{ 
