@@ -1,16 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <project>
 	
-	<meta title="Adding Animation" package="org.openfl.samples.addinganimation" version="1.0.0" company="OpenFL Technologies" />
-	<app main="Main" path="Export" file="AddingAnimation" />
-	<window width="640" height="480" background="#FFFFFF" fps="100" />
+	<meta title="QTDemo" package="org.openfl.samples.addinganimation" version="1.0.0" company="OpenFL Technologies" />
+	<app main="Main" path="Export" file="QTDemo" />
+	<window width="960" height="540" background="#000000" fps="100" />
+	<window orientation="landscape" />
 	
 	<source path="Source" />
 	
 	<haxelib name="openfl" />
 	<haxelib name="actuate" />
 	
-	<assets path="Assets/images" rename="images" include="*.png|*.jpg" exclude="*.svg" />
+	<assets path="Assets/images/sd" rename="images_sd" include="*.png|*.jpg|*.bin" exclude="*.svg|*.xml|*.exe" />
+	<assets path="Assets/images/hd" rename="images_hd" include="*.png|*.jpg|*.bin" exclude="*.svg|*.xml|*.exe" />
+	<assets path="Assets/images/fullhd" rename="images_fullhd" include="*.png|*.jpg|*.bin" exclude="*.svg|*.xml|*.exe" />
 	<assets path="assets/texts" rename="texts" include="*.xml" type="text" />
 	<assets path="assets/fonts" rename="fonts" include="*.ttf" />
 	<assets path="assets/sounds" rename="sounds" include="*.mp3" if="flash" />

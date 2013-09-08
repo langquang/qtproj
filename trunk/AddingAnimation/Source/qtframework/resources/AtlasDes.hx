@@ -3,7 +3,6 @@ package qtframework.resources;
 import flash.utils.ByteArray;
 import flash.utils.Endian;
 import openfl.Assets;
-import qtframework.defines.ResourceDefine;
 import qtframework.utils.Util;
 /**
  * ...
@@ -12,15 +11,17 @@ import qtframework.utils.Util;
 class AtlasDes
 {
 	private var mPacks:Map<String, ByteArray>;
-	public function new() 
+	private var mQuanlity : String;
+	public function new(quanlity : String) 
 	{
-		load();
+		mQuanlity = quanlity;
+		load("images" + mQuanlity+ "/atlas.bin");
 	}
 	
-	public  function load( ):Void
+	public  function load( filename : String):Void
 	{
 		mPacks = new Map<String, ByteArray>();
-		var buff : ByteArray = Assets.getBytes(ResourceDefine.ATLAS_DESC);
+		var buff : ByteArray = Assets.getBytes(filename);
 		buff.endian = Endian.BIG_ENDIAN;
 		var nPack : Int = buff.readShort();
 		while (nPack > 0)
@@ -67,7 +68,6 @@ class AtlasDes
 			data.position = 0;
 			mPacks[name] = data;
 			nPack--;
-			
 		}
 		
 	}
