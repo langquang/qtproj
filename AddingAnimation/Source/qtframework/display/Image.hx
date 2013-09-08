@@ -7,6 +7,7 @@ import flash.filters.GlowFilter;
 import flash.geom.Point;
 import flash.geom.Rectangle;
 import qtframework.textures.Texture;
+import qtframework.qtcore.Starling;
 
 /**
  * ...
@@ -39,6 +40,8 @@ class Image extends Sprite
 		{
 			throw("Texture cannot be null");
 		}
+		var gameScale : Float = Starling.sCurrent.mGameScale;
+		scaleX = scaleY = 1 / gameScale;
 	}
 	
 	public function get_texture():Texture { return mTexture; }

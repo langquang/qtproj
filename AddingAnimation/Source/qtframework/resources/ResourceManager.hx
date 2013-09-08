@@ -11,15 +11,21 @@ import qtframework.textures.TextureAtlas;
  */
 class ResourceManager
 {
-
+	inline public static var SD:String = "_sd";
+	inline public static var HD:String = "_hd";
+	inline public static var FULL_HD:String = "_fullhd";
+	
+	private var mQuanlity : String;
+	private var mGameScale : Float;
 	private var mAtlasDesc : AtlasDes;
 	private var mDefaultTexture : Texture;
 	private var mPacks :Map<String, TextureAtlas>;
 	private var mAtlasRef:Map<String, Int>;
 	
-	public function new() 
+	public function new(quanlity : String) 
 	{
-		mAtlasDesc = new AtlasDes();
+		mQuanlity = quanlity;
+		mAtlasDesc = new AtlasDes(mQuanlity);
 		mPacks = new Map<String, TextureAtlas>();
 		mAtlasRef = new Map<String, Int>();
 	}
@@ -54,7 +60,7 @@ class ResourceManager
 		else
 		{
 			var desc : ByteArray = mAtlasDesc.getPackDesc(name);
-			var bm : BitmapData = Assets.getBitmapData("images/" +name + ".png");
+			var bm : BitmapData = Assets.getBitmapData( "images" + mQuanlity+ "/" +name + ".png");
 			var texture : Texture = new Texture(bm);
 			if ( desc != null && bm != null ){
 				var atlas : TextureAtlas = new TextureAtlas(texture, desc);

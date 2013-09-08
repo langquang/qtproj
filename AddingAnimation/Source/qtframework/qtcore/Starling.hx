@@ -17,6 +17,9 @@ import qtframework.resources.ResourceManager;
 class Starling extends EventDispatcher
 {
 	inline private static var VERSION:String = "1.2";
+	
+	public var mGameScale(get_mGameScale,null):Float;
+	
 	private var mNativeStage:Stage;
 	private var mMainGame:Game;
 	private var mViewPort:Rectangle;
@@ -41,12 +44,14 @@ class Starling extends EventDispatcher
 		mNativeStage = stage;
 		mMainGame = mainGame;
 		mNativeStage.addChild(mMainGame);
+		mainGame.checkdevice();
+
 		
 
 		mViewPort = new Rectangle(0, 0, stage.stageWidth, stage.stageHeight);
 		
 		mJuggler = new Juggler();
-		mResources = new ResourceManager();
+		mResources = new ResourceManager(ResourceManager.HD);
 		mLastFrameTimestamp = getSecond();
 		// register other event handlers
 		stage.addEventListener(Event.ENTER_FRAME, onEnterFrame);
@@ -143,6 +148,16 @@ class Starling extends EventDispatcher
 		{
 			sCurrent = new Starling(stage, mainGame);
 			return sCurrent;
+		}
+		
+		public function get_mGameScale():Float
+		{
+			return mMainGame.gameScale;
+		}
+		
+		public function getmGameScale():Float
+		{
+			return mMainGame.gameScale;
 		}
 		
 		

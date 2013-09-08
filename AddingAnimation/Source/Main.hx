@@ -30,7 +30,13 @@ class Main extends Sprite {
 	public function new () 
 	{
 		super ();	
-		var mStarling : Starling =Starling.create(stage, new YourGame() );
+		#if ios
+		Stage.setFixedOrientation( -1);
+		Stage.shouldRotateInterface = function (orientation:Int):Bool {
+		return (orientation == Stage.OrientationLandscapeLeft || orientation == Stage.OrientationLandscapeRight);
+		}	
+		#end
+		var mStarling : Starling =Starling.create(stage, new YourGame(480,320) );
 		mStarling.start();
 	}		
 }
