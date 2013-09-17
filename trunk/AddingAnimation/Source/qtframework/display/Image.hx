@@ -34,6 +34,7 @@ class Image extends Sprite
 			mBitmap.x = frame != null ? frame.x : 0;
 			mBitmap.y = frame != null ? frame.y : 0;
 			mBitmap.bitmapData = mTexture.mBitmapData;
+			mBitmap.smoothing = true;
 			addChild(mBitmap);
 		}
 		else

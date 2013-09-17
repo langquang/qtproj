@@ -66,10 +66,10 @@ class Game extends Sprite
 		mRectLeft = new Rectangle(0,0,x, Lib.current.stage.stageHeight);
 		mRectRight = new Rectangle(x + realWidth, 0, deviceWidth - (x + realWidth), deviceHeight);
 		// draw margin
-		drawLeftMargin();
-		drawRightMargin();
-		drawTopMargin();
-		drawBottomMargin();
+		//drawLeftMargin();
+		//drawRightMargin();
+		//drawTopMargin();
+		//drawBottomMargin();
 		
 	}
 	
