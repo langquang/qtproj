@@ -8,6 +8,7 @@ import flash.geom.Point;
 import flash.geom.Rectangle;
 import qtframework.textures.Texture;
 import qtframework.qtcore.Starling;
+import qtframework.defines.DisplayAlign;
 
 /**
  * ...
@@ -21,21 +22,22 @@ class Image extends Sprite
 	public var texture(get_texture, set_texture):Texture;
 	public var isFilter(default, null) : Bool;
 	private var mCurrentFilter : BitmapFilter;
+	public var mAlign ( default, set_mAlign): Int;
+	private var mAlignX : Float;
+	private var mAlignY : Float;
 
 	//@Butin next update: TextureSmoothing.BILINEAR
-	public function new(texture:Texture) 
+	public function new(texture:Texture, align : Int = 0) 
 	{
 		super();
 		 if (texture != null)
 		{
 			mTexture = texture;
-			var frame:Rectangle = texture.mFrame;
 			mBitmap = new Bitmap();
-			mBitmap.x = frame != null ? frame.x : 0;
-			mBitmap.y = frame != null ? frame.y : 0;
 			mBitmap.bitmapData = mTexture.mBitmapData;
 			mBitmap.smoothing = true;
 			addChild(mBitmap);
+			mAlign = align;
 		}
 		else
 		{
@@ -56,9 +58,8 @@ class Image extends Sprite
 		{
 			mTexture = texture;
 			var frame:Rectangle = texture.mFrame;
-			mBitmap.x = frame != null ? frame.x : 0;
-			mBitmap.y = frame != null ? frame.y : 0;
 			mBitmap.bitmapData = mTexture.mBitmapData;
+			mAlign = mAlign;
 		}
 		return mTexture;
 	}
@@ -84,6 +85,22 @@ class Image extends Sprite
 			var filterData : BitmapData = new BitmapData(texture.get_width(), texture.get_height() );
 			filterData.applyFilter(texture.mBitmapData, texture.mClipping, new Point(0, 0), filter);	
 			return filterData;
+	}
+	
+	public function set_mAlign( value : Int ):Int
+	{
+		mAlign = value;
+		if ( mAlign == DisplayAlign.CENTER )
+		{
+			mAlignX = cast mTexture.mBitmapData.width >> 1;
+			mAlignY = cast mTexture.mBitmapData.height >> 1;
+		}
+		var frame:Rectangle = texture.mFrame;
+		mBitmap.x = frame != null ? frame.x : 0;
+		mBitmap.y = frame != null ? frame.y : 0;
+		mBitmap.x -= mAlignX;
+		mBitmap.y -= mAlignY;
+		return value;
 	}
 	
 }
