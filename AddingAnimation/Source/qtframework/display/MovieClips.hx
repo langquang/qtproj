@@ -6,6 +6,7 @@ import flash.Vector.Vector;
 import qtframework.qtanimation.IAnimatable;
 import qtframework.textures.Texture;
 import qtframework.events.QTEvent;
+import flash.geom.Rectangle;
 /**
  * ...
  * @author butin
@@ -25,6 +26,8 @@ class MovieClips extends Image implements IAnimatable
 	private var mPlaying:Bool;
 	public var numFrames(get_numFrames, null) : Int;
 	public var currentFrame(get_currentFrame, set_currentFrame) : Int;
+	public var loop(get_loop, set_loop):Bool;
+	public var rect(get_rect, null):Rectangle;
 
 	
 	 /** Creates a movie clip from the provided textures and with the specified default framerate.*/  
@@ -162,6 +165,13 @@ class MovieClips extends Image implements IAnimatable
 		currentFrame = 0;
 	}
 	
+	public function rePlay():Void
+	{
+		mPlaying = true;
+		currentFrame = 0;
+		mCurrentTime = 0;
+	}
+	
 	// helpers
 	
 	private function updateStartTimes():Void
@@ -183,17 +193,21 @@ class MovieClips extends Image implements IAnimatable
 		var finalFrame:Int;
 		var previousFrame:Int = mCurrentFrame;
 		
-		if (mLoop && mCurrentTime == mTotalTime) { mCurrentTime = 0.0; mCurrentFrame = 0; }
-		if (!mPlaying || passedTime == 0.0 || mCurrentTime == mTotalTime) return;
+
+		if (mLoop == true && mCurrentTime == mTotalTime) { mCurrentTime = 0.0; mCurrentFrame = 0; }
+		if (mPlaying == false || passedTime == 0.0 || mCurrentTime == mTotalTime) {
+			return;
+		}
 		
 		mCurrentTime += passedTime;
 		finalFrame = mTextures.length - 1;
 		
-		while (mCurrentTime >= mStartTimes[mCurrentFrame] + mDurations[mCurrentFrame])
+
+		while (mCurrentTime + 0.00001 >= mStartTimes[mCurrentFrame] + mDurations[mCurrentFrame])
 		{
 			if (mCurrentFrame == finalFrame)
 			{
-				if (hasEventListener(QTEvent.COMPLETE))
+				if (hasEventListener(QTEvent.COMPLETE) == true )
 				{
 					var restTime:Float = mCurrentTime - mTotalTime;
 					mCurrentTime = mTotalTime;
@@ -204,7 +218,7 @@ class MovieClips extends Image implements IAnimatable
 					return;
 				}
 				
-				if (mLoop)
+				if (mLoop == true)
 				{
 					mCurrentTime -= mTotalTime;
 					mCurrentFrame = 0;
@@ -233,7 +247,7 @@ class MovieClips extends Image implements IAnimatable
 	/** Indicates if a (non-looping) movie has come to its end. */
 	public function get_isComplete():Bool
 	{
-		return !mLoop && mCurrentTime >= mTotalTime;
+		return mLoop == false && mCurrentTime >= mTotalTime;
 	}
 	
 	// properties  
@@ -246,7 +260,7 @@ class MovieClips extends Image implements IAnimatable
 	
 	/** Indicates if the clip should loop. */
 	public function get_loop():Bool { return mLoop; }
-	public function set_loop(value:Bool):Void { mLoop = value; }
+	public function set_loop(value:Bool):Bool { mLoop = value;  return mLoop; }
 	
 	/** The index of the frame that is currently displayed. */
 	public function get_currentFrame():Int { return mCurrentFrame; }
@@ -260,6 +274,14 @@ class MovieClips extends Image implements IAnimatable
 		
 		texture = mTextures[mCurrentFrame];
 		return 0;
+	}
+	
+	public function get_rect():Rectangle
+	{
+		var rect : Rectangle = mTextures[mCurrentFrame].mClipping;
+		rect.x += x;
+		rect.y += y;
+		return rect;
 	}
 	
 	/** The default number of frames per second. Individual frames can have different 
@@ -283,7 +305,7 @@ class MovieClips extends Image implements IAnimatable
 	 *  is reached. */
 	public function get_isPlaying():Bool 
 	{
-		if (mPlaying)
+		if (mPlaying == true)
 			return mLoop || mCurrentTime < mTotalTime;
 		else
 			return false;
