@@ -1,4 +1,5 @@
 package ;
+import flash.display.Bitmap;
 import flash.display.Sprite;
 import flash.events.Event;
 import flash.text.TextField;
@@ -9,6 +10,7 @@ import game.states.BaseState;
 import game.states.LoadingState;
 import game.states.MenuState;
 import game.Wolverine;
+import haxe.Utf8;
 import openfl.display.FPS;
 import qtframework.display.Image;
 import qtframework.gui.QTButton;
@@ -26,6 +28,7 @@ import qtframework.texts.QTFontSymbol;
 import qtframework.texts.QTTextAlign;
 import qtframework.texts.QTTextField;
 import openfl.Assets;
+import qtframework.utils.Util;
 
 /**
  * ...
@@ -57,42 +60,35 @@ class YourGame extends  Game
 		//m_LoadingState.addEventListener(QTEvent.DOWNLOAD_COMPLETE, onDownloaded);
 		//addChild(m_LoadingState);
 		
+		Starling.sCurrent.texts.loadData();
 		
 		var font:QTBitmapFont = new QTBitmapFont().loadPixelizer(Assets.getBitmapData("images_hd/fontData10pt.png"), " !\"#$%&'()*+,-./" + "0123456789:;<=>?" + "@ABCDEFGHIJKLMNO" + "PQRSTUVWXYZ[]^_" + "abcdefghijklmno" + "pqrstuvwxyz{|}~\\");
 		
-		var content = Assets.getBytes("texts/NavTitle.xml");
+		var content = Assets.getBytes("images_hd/vn.fnt");
 		var textBytes : String = content.toString();
-
-
+		
+		//var str : String = Starling.sCurrent.texts.getText("text1");
+		var str : String  = "11111111";
+		trace(str.length);
+		
+		
 		var XMLData = Xml.parse(textBytes);
-		var font2:QTBitmapFont = new QTBitmapFont().loadAngelCode(Assets.getBitmapData("images_hd/NavTitle.png"), XMLData);
+		var font2:QTBitmapFont = new QTBitmapFont().loadAngelCode(Assets.getBitmapData("images_hd/vn.png"), XMLData);
 		
 		var tf : QTTextField = new QTTextField(font2);
 		tf.scaleX = 1 / Starling.sCurrent.mGameScale;
 		tf.scaleY = 1 / Starling.sCurrent.mGameScale;
-	//	addChild(tf); // I don't add this component to display list as you can see
-		tf.text = "Hello World!\nand this is\nmultiline!!!\n1234567890";
-//		tf.color = 0x0000ff;
+		tf.x = gameWidth / 2;
+		addChild(tf); // I don't add this component to display list as you can see
+
+	
+		tf.text =  str;
+		tf.color = 0x0000ff;
 		tf.background = true;
-//		tf.fixedWidth = false;
+		tf.fixedWidth = false;
 		tf.multiLine = true;
-		tf.backgroundColor = 0xffffff;
-//		tf.shadow = true;
-		tf.setWidth(250);
 		tf.alignment = QTTextAlign.CENTER;
 		tf.lineSpacing = 5;
-	//	tf.fontScale = 2.5;
-		tf.padding = 5;
-	//	tf.scaleX = tf.scaleY = 2.5;
-	//	tf.setAlpha(0.5);
-		
-	addChild(tf);
-		//var s: Sprite = new Sprite();
-		//s.scaleX = 1 / Starling.sCurrent.mGameScale;
-		//s.scaleY = 1 / Starling.sCurrent.mGameScale;
-		//addChild(s);
-	
-		//tf.drawText(s.graphics, 100, 200);
 
 		
 

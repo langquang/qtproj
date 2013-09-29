@@ -1,6 +1,7 @@
 package qtframework.texts;
 
 import flash.display.BitmapData;
+import haxe.Utf8;
 //import nme.display.BitmapInt32;
 import flash.display.Graphics;
 import flash.geom.ColorTransform;
@@ -294,9 +295,13 @@ class QTBitmapFont
 			{
 				pixelColor = pBitmapData.getPixel32(cx, cy);
 				#if neko
-				if (pixelColor.rgb == bgColor32.rgb && pixelColor.a == bgColor32.a)
+				//if (pixelColor.rgb == bgColor32.rgb && pixelColor.a == bgColor32.a)
+				//{
+					//resultBitmapData.setPixel32(cx, cy, {rgb: 0x000000, a: 0x00});
+				//}
+				if (pixelColor == bgColor32)
 				{
-					resultBitmapData.setPixel32(cx, cy, {rgb: 0x000000, a: 0x00});
+					resultBitmapData.setPixel32(cx, cy, 0x00000000);
 				}
 				#else
 				if (pixelColor == bgColor32)
@@ -470,18 +475,21 @@ class QTBitmapFont
 		_point.y = pOffsetY;
 		#if (flash || js)
 		var glyph:BitmapData;
+		var length : Int = pText.length;
 		#else
 		var glyph:QTFontSymbol;
 		var glyphWidth:Int;
+		var length : Int = Utf8.length(pText);
 		#end
 		
-		for (i in 0...(pText.length)) 
-		{
-			var charCode:Int = pText.charCodeAt(i);
+		for (i in 0...length) 
+		{	
 			#if (flash || js)
+			var charCode:Int = pText.charCodeAt(i);
 			glyph = pFontData[charCode];
 			if (glyph != null) 
 			#else
+			var charCode:Int = Utf8.charCodeAt(pText, i);
 			glyph = _glyphs.get(charCode);
 			if (_glyphs.exists(charCode))
 			#end
@@ -546,6 +554,7 @@ class QTBitmapFont
 		for (i in 0...(textLength)) 
 		{
 			var charCode:Int = pText.charCodeAt(i);
+			trace("char:" + Std.string(charCode));
 			#if (flash || js)
 			var glyph:BitmapData = _glyphs[charCode];
 			if (glyph != null) 

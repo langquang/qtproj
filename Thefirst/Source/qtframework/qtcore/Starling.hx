@@ -9,6 +9,7 @@ import flash.events.KeyboardEvent;
 import flash.events.ErrorEvent;
 import qtframework.qtanimation.Juggler;
 import qtframework.resources.ResourceManager;
+import qtframework.resources.TextBin;
 
 /**
  * ...
@@ -29,6 +30,8 @@ class Starling extends EventDispatcher
 	 
 	 private var mResources : ResourceManager;
 	 public var resources(get_resources, null):ResourceManager;
+	 private var m_Texts : TextBin;
+	 public var texts(get_texts, null):TextBin;
 	 
 	 private var mStarted:Bool;   
 	 private var mLastFrameTimestamp : Float;
@@ -45,6 +48,8 @@ class Starling extends EventDispatcher
 		mMainGame = mainGame;
 		mNativeStage.addChild(mMainGame);
 		mainGame.checkdevice();
+		
+		m_Texts = new TextBin();
 
 		
 
@@ -158,6 +163,17 @@ class Starling extends EventDispatcher
 		public function getmGameScale():Float
 		{
 			return mMainGame.gameScale;
+		}
+		
+		public function get_texts():TextBin
+		{
+			return m_Texts;
+		}
+		
+		public function loadTextData():Void
+		{
+			if ( m_Texts.isLoaded() == false )
+				m_Texts.loadData();
 		}
 		
 		
