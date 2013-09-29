@@ -1,9 +1,13 @@
 package ;
 import flash.display.Sprite;
+import flash.events.Event;
 import flash.text.TextField;
 import flash.Vector.Vector;
 import flash.events.TouchEvent;
 import flash.events.MouseEvent;
+import game.states.BaseState;
+import game.states.LoadingState;
+import game.states.MenuState;
 import game.Wolverine;
 import openfl.display.FPS;
 import qtframework.display.Image;
@@ -13,31 +17,34 @@ import qtframework.qtcore.Game;
 import qtframework.textures.Texture;
 import qtframework.display.MovieClips;
 import qtframework.qtcore.Starling;
+import qtframework.events.QTEvent;
 import motion.Actuate;
 import motion.easing.Quad;
+import qtframework.texts.QTBitmapFont;
+import qtframework.texts.QTDefaultFontGenerator;
+import qtframework.texts.QTFontSymbol;
+import qtframework.texts.QTTextAlign;
+import qtframework.texts.QTTextField;
+import openfl.Assets;
 
 /**
  * ...
  * @author butin
  */
-class YourGame extends  Game implements IAnimatable
+class YourGame extends  Game
 {
 
-	private var mBackground : Image;
-	private var mCreeds : Vector<Wolverine>;
-	private var mtime : Float = 1;//2 s
-	private var mtotaltime : Float = 0;
-	
-	//display
-	private var mScoreImg : Image;
-	private var mScoreTxt : TextField;
-	// login
-	private var mScoreNum : Int;
-	private var mLastWolverine : Int;
+	private var m_LoadingState : LoadingState;
+	private var m_MenuState : MenuState;
+	//private var m_PlayState : LoadingState;
+	//private var m_EndState : LoadingState;
+
+
 
 	public function new(game_width : Float, game_height : Float) 
 	{
 		super(game_width, game_height);
+		showStats(true);
 		
 		graphics.beginFill(0xffffff, 0.2);
 		graphics.drawRect(0, 0, gameWidth, gameHeight);
@@ -46,103 +53,60 @@ class YourGame extends  Game implements IAnimatable
 	
 	override public function gameInit():Void
 	{
-		mBackground = new Image(Starling.sCurrent.resources.getFrame("bg", "bg0000"));
-		addChild(mBackground);
+		//m_LoadingState = new LoadingState();
+		//m_LoadingState.addEventListener(QTEvent.DOWNLOAD_COMPLETE, onDownloaded);
+		//addChild(m_LoadingState);
 		
 		
-		mScoreImg = new Image(Starling.sCurrent.resources.getFrame("coin", "gold0000"));
-		mScoreImg.x = gameWidth - (mScoreImg.width + 50);
-		addChild(mScoreImg);
+		var font:QTBitmapFont = new QTBitmapFont().loadPixelizer(Assets.getBitmapData("images_hd/fontData10pt.png"), " !\"#$%&'()*+,-./" + "0123456789:;<=>?" + "@ABCDEFGHIJKLMNO" + "PQRSTUVWXYZ[]^_" + "abcdefghijklmno" + "pqrstuvwxyz{|}~\\");
 		
-		mScoreTxt = new TextField();
-		mScoreTxt.x = gameWidth - 45;
-		mScoreTxt.y = cast mScoreImg.height/2;
-		mScoreTxt.textColor = 0xff0000;
-		mScoreTxt.text = "0";
-		addChild(mScoreTxt);
-		
-		
-		//mCreeds = new Vector<Wolverine>(6);
-		//var row : Int = 0;
-		//var col : Int = 0;
-		//for ( i in 0...6)
-		//{
-				//row = cast  i / 3;
-				//col = i % 3;
-				//mCreeds[i] = new Wolverine();
-				//mCreeds[i].x = 50 + col*mCreeds[i].width;
-				//mCreeds[i].y = 170 + row * ( mCreeds[i].height + 20 );
-				//mCreeds[i].addEventListener(MouseEvent.CLICK, onTap);
-				//addChild(mCreeds[i]);
-		//}
-		//
-		//Starling.sCurrent.juggler.add(this);
-		//
-		//mCreeds[0].setStatus(Wolverine.Appear);
-		
-		
+		var content = Assets.getBytes("texts/NavTitle.xml");
+		var textBytes : String = content.toString();
 
-		addChild( new FPS() );
+
+		var XMLData = Xml.parse(textBytes);
+		var font2:QTBitmapFont = new QTBitmapFont().loadAngelCode(Assets.getBitmapData("images_hd/NavTitle.png"), XMLData);
 		
+		var tf : QTTextField = new QTTextField(font2);
+		tf.scaleX = 1 / Starling.sCurrent.mGameScale;
+		tf.scaleY = 1 / Starling.sCurrent.mGameScale;
+	//	addChild(tf); // I don't add this component to display list as you can see
+		tf.text = "Hello World!\nand this is\nmultiline!!!\n1234567890";
+//		tf.color = 0x0000ff;
+		tf.background = true;
+//		tf.fixedWidth = false;
+		tf.multiLine = true;
+		tf.backgroundColor = 0xffffff;
+//		tf.shadow = true;
+		tf.setWidth(250);
+		tf.alignment = QTTextAlign.CENTER;
+		tf.lineSpacing = 5;
+	//	tf.fontScale = 2.5;
+		tf.padding = 5;
+	//	tf.scaleX = tf.scaleY = 2.5;
+	//	tf.setAlpha(0.5);
 		
-		var button : QTButton = new QTButton(Starling.sCurrent.resources.getFrame("coin", "gold0000"));
-		button.x = 200;
-		button.y = 200;
-		addChild(button);
-	}
+	addChild(tf);
+		//var s: Sprite = new Sprite();
+		//s.scaleX = 1 / Starling.sCurrent.mGameScale;
+		//s.scaleY = 1 / Starling.sCurrent.mGameScale;
+		//addChild(s);
 	
-	public function advanceTime(time:Float):Void
-	{
-		mtotaltime += time;
-		if ( mtotaltime >= mtime )
-		{
-			mtotaltime = 0;
-			var index : Int = 0;
-			while (index == mLastWolverine)
-			{
-				index = cast ( (Math.random()*600)/100);
-			}
-			mCreeds[index].setStatus(Wolverine.Appear);
-			mLastWolverine = index;
-		}
-	}
-	
-	public function onTap(e : MouseEvent):Void
-	{
-		var wolverine : Wolverine = cast e.currentTarget;		
-		if( wolverine.canKick() )
-		{
-			wolverine.setStatus(Wolverine.Knockout);
-			addScore(50,wolverine);
-			
-		}
-	}
-	
-	public function addScore(value : Int, wolverine : Wolverine = null):Void
-	{
-		mScoreNum += value;
-		if ( wolverine != null )
-		{
-			var mc : MovieClips = new MovieClips(Starling.sCurrent.resources.getSequenceFrame("coin", "coin"), 15);
-			mc.x = wolverine.x + mc.width;
-			mc.y = wolverine.y - mc.height;
-			addChild(mc);
-			Starling.sCurrent.juggler.add(mc);
-			Actuate.tween (mc, 1, { x: mScoreTxt.x, y: mScoreTxt.y }, false).ease (Quad.easeInOut).onComplete (animateCircle, [ mc ]);
-		}
-		else {
-			mScoreTxt.text = Std.string(mScoreNum);
-		}
+		//tf.drawText(s.graphics, 100, 200);
 
 		
 
 	}
 	
-	private function animateCircle (mc:MovieClips):Void 
+	private function onDownloaded( e : QTEvent):Void
 	{
-		mScoreTxt.text = Std.string(mScoreNum);
-		removeChild(mc);
-		mc = null;
+		removeChild(m_LoadingState);
+		m_LoadingState.dispose();
+		m_LoadingState = null;
+		m_MenuState = new MenuState();
+		addChild(m_MenuState);
+		
 	}
+	
 
 }

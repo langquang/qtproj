@@ -3,7 +3,9 @@ package qtframework.qtcore;
 import flash.display.Sprite;
 import flash.geom.Point;
 import flash.geom.Rectangle;
+import flash.events.Event;
 import flash.Lib;
+import qtframework.debug.Stats;
 /**
  * ...
  * @author butin
@@ -22,14 +24,18 @@ class Game extends Sprite
 	
 	public var realWidth : Float;
 	public var realHeight : Float;
-	public var deviceWidth : Float;
-	public var deviceHeight : Float;
+	public var deviceWidth(default, null) : Float;
+	public var deviceHeight(default, null) : Float;
+	
+	private var mDebugContainer : Sprite;
+	private var mStats : Stats;
 	
 	function new(game_width : Float, game_height : Float) 
 	{
 		super();
 		gameWidth = game_width;
 		gameHeight = game_height;
+		addEventListener(Event.ADDED_TO_STAGE, onAddToStage);
 	};
 	public function gameInit():Void{};
 	public function gameUpdate():Void {};
@@ -115,6 +121,31 @@ class Game extends Sprite
 		maskobj.x = mRectBottom.x;
 		maskobj.y = mRectBottom.y;
 		Lib.current.stage.addChild(maskobj);
+	}
+	
+	private function onAddToStage(e : Event):Void
+	{
+		removeEventListener(Event.ADDED_TO_STAGE, onAddToStage);
+		if ( mDebugContainer == null ) 
+			mDebugContainer = new Sprite();
+		Lib.current.stage.addChild(mDebugContainer);
+	}
+	
+	public function showStats( value : Bool ):Void
+	{
+		if ( value == true )
+		{
+			if ( mDebugContainer == null ) 
+				mDebugContainer = new Sprite();
+			if ( mStats == null )  
+				mStats = new Stats();
+			mDebugContainer.addChild(mStats);
+		}
+		else if ( mStats != null  )
+		{
+			removeChild(mStats);
+			mStats = null;	
+		}
 	}
 	
 	

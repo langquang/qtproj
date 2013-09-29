@@ -21,7 +21,7 @@ class Starling extends EventDispatcher
 	public var mGameScale(get_mGameScale,null):Float;
 	
 	private var mNativeStage:Stage;
-	private var mMainGame:Game;
+	public var mMainGame(default,null):Game;
 	private var mViewPort:Rectangle;
 	
 	 private var mJuggler:Juggler;
