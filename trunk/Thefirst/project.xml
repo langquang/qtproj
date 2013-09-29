@@ -12,9 +12,9 @@
 	<haxelib name="actuate" />
 	
 	<assets path="Assets/images/sd" rename="images_sd" include="*.png|*.jpg|*.bin" exclude="*.svg|*.xml|*.exe" />
-	<assets path="Assets/images/hd" rename="images_hd" include="*.png|*.jpg|*.bin" exclude="*.svg|*.xml|*.exe" />
+	<assets path="Assets/images/hd" rename="images_hd" include="*.png|*.jpg|*.bin|*.fnt" exclude="*.svg|*.xml|*.exe" />
 	<assets path="Assets/images/fullhd" rename="images_fullhd" include="*.png|*.jpg|*.bin" exclude="*.svg|*.xml|*.exe" />
-	<assets path="assets/texts" rename="texts" include="*.xml" type="text" />
+	<assets path="assets/texts" rename="texts" include="*.bin|*.xml" type="text" />
 	<assets path="assets/fonts" rename="fonts" include="*.ttf" />
 	<assets path="assets/sounds" rename="sounds" include="*.mp3" if="flash" />
 	<assets path="assets/sounds" rename="sounds" include="*.wav|*.ogg" unless="flash" />
