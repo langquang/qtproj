@@ -1,7 +1,7 @@
 package qtframework.texts;
 
 import flash.display.BitmapData;
-import pxBitmapFont.PxBitmapFont;
+import qtframework.texts.QTBitmapFont;
 
 /**
  * Creates a default font. This is done automatically when intializing Pixelizer.
@@ -60,7 +60,7 @@ class QTDefaultFontGenerator
 			letterPos++;
 		}
 		
-		PxBitmapFont.store("default", new PxBitmapFont().loadPixelizer(bd, letters));
+		QTBitmapFont.store("default", new QTBitmapFont().loadPixelizer(bd, letters));
 		bd.dispose();
 	}
 }

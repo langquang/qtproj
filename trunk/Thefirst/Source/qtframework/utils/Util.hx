@@ -19,4 +19,11 @@ class Util
 		return buffer.readUTFBytes(length);
 	}
 	
+	// return in second
+	public static function getSecond()  : Float
+	{
+		var time = flash.Lib.getTimer();
+		return time/1000.0;
+	}
+	
 }

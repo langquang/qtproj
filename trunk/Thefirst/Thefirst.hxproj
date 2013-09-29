@@ -24,7 +24,7 @@
     <option directives="tools=1&#xA;openfl_ver=1.0.7&#xA;openfl&#xA;display&#xA;web" />
     <option flashStrict="False" />
     <option mainClass="ApplicationMain" />
-    <option enabledebug="False" />
+    <option enabledebug="True" />
     <option additional="--no-output&#xA;-swf-version 11&#xA;#--remap nme:flash" />
   </build>
   <!-- haxelib libraries -->

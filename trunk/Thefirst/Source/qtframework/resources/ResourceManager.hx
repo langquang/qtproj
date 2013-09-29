@@ -30,6 +30,11 @@ class ResourceManager
 		mAtlasRef = new Map<String, Int>();
 	}
 	
+	public function loadPack(pack : String):TextureAtlas
+	{
+		 return getPack(pack);
+	}
+	
 	public function getFrame(pack : String, name : String):Texture
 	{
 		var atlas : TextureAtlas = getPack(pack);

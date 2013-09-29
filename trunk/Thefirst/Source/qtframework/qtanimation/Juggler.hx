@@ -51,7 +51,7 @@ class Juggler implements IAnimatable
 	 /** Delays the execution of a function until a certain time has passed. Creates an
          *  object of type 'DelayedCall' internally and returns it. Remove that object
          *  from the juggler to cancel the function func. */
-	public function delayCall(func:Dynamic, delay:Float, args:Array<Dynamic>):DelayedCall
+	public function delayCall(func:Dynamic, delay:Float, args:Array<Dynamic> = null):DelayedCall
 	{
 		if (func == null) return null;
 		

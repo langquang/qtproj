@@ -30,6 +30,8 @@ class Image extends Sprite
 	public function new(texture:Texture, align : Int = 0) 
 	{
 		super();
+		mAlignX = 0;
+		mAlignY = 0;
 		 if (texture != null)
 		{
 			mTexture = texture;
@@ -102,6 +104,11 @@ class Image extends Sprite
 		mBitmap.y = frame != null ? frame.y : 0;
 		mBitmap.x -= mAlignX;
 		mBitmap.y -= mAlignY;
+		
+		var gameScale : Float = Starling.sCurrent.mGameScale;
+		mBitmap.x /= gameScale;
+		mBitmap.y /= gameScale;
+		
 		return value;
 	}
 	

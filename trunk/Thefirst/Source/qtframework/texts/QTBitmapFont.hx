@@ -1,7 +1,7 @@
 package qtframework.texts;
 
 import flash.display.BitmapData;
-import flash.display.BitmapInt32;
+//import nme.display.BitmapInt32;
 import flash.display.Graphics;
 import flash.geom.ColorTransform;
 import flash.geom.Matrix;
@@ -9,7 +9,7 @@ import flash.geom.Point;
 import flash.geom.Rectangle;
 
 #if (cpp || neko)
-import flash.display.Tilesheet;
+import openfl.display.Tilesheet;
 #end
 
 /**
@@ -18,14 +18,14 @@ import flash.display.Tilesheet;
  */
 class QTBitmapFont 
 {
-	private static var _storedFonts:Hash<PxBitmapFont> = new Hash<PxBitmapFont>();
+	private static var _storedFonts:Map<String,QTBitmapFont> = new Map<String,QTBitmapFont>();
 	
 	private static var ZERO_POINT:Point = new Point();
 	
 	#if (flash || js)
 	private var _glyphs:Array<BitmapData>;
 	#else
-	private var _glyphs:IntHash<PxFontSymbol>;
+	private var _glyphs:Map<Int,QTFontSymbol>;
 	private var _num_letters:Int;
 	private var _tileSheet:Tilesheet;
 	private static var _flags = Tilesheet.TILE_SCALE | Tilesheet.TILE_ROTATION | Tilesheet.TILE_ALPHA | Tilesheet.TILE_RGB;
@@ -54,7 +54,7 @@ class QTBitmapFont
 		_colorTransform = new ColorTransform();
 		_glyphs = [];
 		#else
-		_glyphs = new IntHash<PxFontSymbol>();
+		_glyphs = new Map<Int,QTFontSymbol>();
 		_num_letters = 0;
 		#end
 	}
@@ -65,7 +65,7 @@ class QTBitmapFont
 	 * @param	pLetters	all letters contained in this font
 	 * @return				this font
 	 */
-	public function loadPixelizer(pBitmapData:BitmapData, pLetters:String):PxBitmapFont
+	public function loadPixelizer(pBitmapData:BitmapData, pLetters:String):QTBitmapFont
 	{
 		reset();
 		_glyphString = pLetters;
@@ -106,7 +106,7 @@ class QTBitmapFont
 	 * @param	pXMLData	font data in XML format
 	 * @return				this font
 	 */
-	public function loadAngelCode(pBitmapData:BitmapData, pXMLData:Xml):PxBitmapFont
+	public function loadAngelCode(pBitmapData:BitmapData, pXMLData:Xml):QTBitmapFont
 	{
 		reset();
 		
@@ -212,7 +212,7 @@ class QTBitmapFont
 		#if (flash || js)
 		_glyphs = [];
 		#else
-		_glyphs = new IntHash<PxFontSymbol>();
+		_glyphs = new Map<Int,QTFontSymbol>();
 		#end
 		_glyphString = "";
 	}
@@ -282,8 +282,8 @@ class QTBitmapFont
 		var pixelColor:Int;
 		var bgColor32:Int = pBitmapData.getPixel(0, 0);
 		#else
-		var pixelColor:BitmapInt32;
-		var bgColor32:BitmapInt32 = pBitmapData.getPixel32(0, 0);
+		var pixelColor:Int;
+		var bgColor32:Int = pBitmapData.getPixel32(0, 0);
 		#end
 		
 		cy = 0;
@@ -434,7 +434,7 @@ class QTBitmapFont
 	{
 		_tileSheet.addTileRect(pRect);
 		
-		var symbol:PxFontSymbol = new PxFontSymbol();
+		var symbol:QTFontSymbol = new QTFontSymbol();
 		symbol.tileID = pGlyphID;
 		symbol.xoffset = pOffsetX;
 		symbol.yoffset = pOffsetY;
@@ -471,7 +471,7 @@ class QTBitmapFont
 		#if (flash || js)
 		var glyph:BitmapData;
 		#else
-		var glyph:PxFontSymbol;
+		var glyph:QTFontSymbol;
 		var glyphWidth:Int;
 		#end
 		
@@ -601,7 +601,7 @@ class QTBitmapFont
 	 * @param	pHandle	String identifer for the font.
 	 * @param	pFont	Font to store.
 	 */
-	public static function store(pHandle:String, pFont:PxBitmapFont):Void 
+	public static function store(pHandle:String, pFont:QTBitmapFont):Void 
 	{
 		_storedFonts.set(pHandle, pFont);
 	}
@@ -611,9 +611,9 @@ class QTBitmapFont
 	 * @param	pHandle	Identifier of font to fetch.
 	 * @return	Stored font, or null if no font was found.
 	 */
-	public static function fetch(pHandle:String):PxBitmapFont 
+	public static function fetch(pHandle:String):QTBitmapFont 
 	{
-		var f:PxBitmapFont = _storedFonts.get(pHandle);
+		var f:QTBitmapFont = _storedFonts.get(pHandle);
 		return f;
 	}
 

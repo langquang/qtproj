@@ -5,7 +5,7 @@ import flash.display.BitmapData;
 import flash.display.Graphics;
 import flash.display.Sprite;
 import flash.geom.Matrix;
-import pxBitmapFont.PxBitmapFont;
+import qtframework.texts.QTBitmapFont;
 
 /**
  * Renders a text field.
@@ -13,7 +13,7 @@ import pxBitmapFont.PxBitmapFont;
  */
 class QTTextField extends Sprite 
 {
-	private var _font:PxBitmapFont;
+	private var _font:QTBitmapFont;
 	private var _text:String;
 	private var _color:Int;
 	private var _useColor:Bool;
@@ -59,7 +59,7 @@ class QTTextField extends Sprite
 	 * Constructs a new text field component.
 	 * @param pFont	optional parameter for component's font prop
 	 */
-	public function new(?pFont:PxBitmapFont = null) 
+	public function new(?pFont:QTBitmapFont = null) 
 	{
 		super();
 		
@@ -72,7 +72,7 @@ class QTTextField extends Sprite
 		_shadowColor = 0x0;
 		_background = false;
 		_backgroundColor = 0xFFFFFF;
-		_alignment = PxTextAlign.LEFT;
+		_alignment = QTTextAlign.LEFT;
 		_padding = 0;
 		_pendingTextChange = false;
 		_fieldWidth = 1;
@@ -91,11 +91,11 @@ class QTTextField extends Sprite
 		
 		if (pFont == null)
 		{
-			if (PxBitmapFont.fetch("default") == null)
+			if (QTBitmapFont.fetch("default") == null)
 			{
-				PxDefaultFontGenerator.generateAndStoreDefaultFont();
+				QTDefaultFontGenerator.generateAndStoreDefaultFont();
 			}
-			_font = PxBitmapFont.fetch("default");
+			_font = QTBitmapFont.fetch("default");
 		}
 		else
 		{
@@ -422,7 +422,7 @@ class QTTextField extends Sprite
 			{
 				var ox:Int = 0; // LEFT
 				var oy:Int = 0;
-				if (alignment == PxTextAlign.CENTER) 
+				if (alignment == QTTextAlign.CENTER) 
 				{
 					if (_fixedWidth)
 					{
@@ -433,7 +433,7 @@ class QTTextField extends Sprite
 						ox = Math.floor((finalWidth - _font.getTextWidth(t, _letterSpacing, _fontScale)) / 2);
 					}
 				}
-				if (alignment == PxTextAlign.RIGHT) 
+				if (alignment == QTTextAlign.RIGHT) 
 				{
 					if (_fixedWidth)
 					{
@@ -764,14 +764,14 @@ class QTTextField extends Sprite
 	/**
 	 * Sets which font to use for rendering.
 	 */
-	public var font(get_font, set_font):PxBitmapFont;
+	public var font(get_font, set_font):QTBitmapFont;
 	
-	public function get_font():PxBitmapFont
+	public function get_font():QTBitmapFont
 	{
 		return _font;
 	}
 	
-	public function set_font(pFont:PxBitmapFont):PxBitmapFont 
+	public function set_font(pFont:QTBitmapFont):QTBitmapFont 
 	{
 		if (_font != pFont)
 		{

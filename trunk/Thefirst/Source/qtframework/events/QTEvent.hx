@@ -32,6 +32,9 @@ class QTEvent extends flash.events.Event
 	/** Event type for an animated object that requests to be removed from the juggler. */
 	inline public static var REMOVE_FROM_JUGGLER:String = "removeFromJuggler";
 	
+	inline public static var DOWNLOAD_COMPLETE:String = "downloadComplete";
+	
+	
 //	private static var sEventPool:Array<QTEvent> = new Array<QTEvent>();
 	// @Butin next update :  Pool events
 	
