@@ -2,6 +2,7 @@ package ;
 import flash.display.Bitmap;
 import flash.display.BitmapData;
 import flash.display.Sprite;
+import flash.Lib;
 import flash.text.TextField;
 import openfl.display.FPS;
 import qtframework.display.Image;
@@ -11,8 +12,9 @@ import qtframework.display.MovieClips;
 import qtframework.qtcore.Starling;
 import flash.events.KeyboardEvent;
 import flash.ui.Keyboard;
+import flash.events.MouseEvent;
 import flash.events.Event;
-
+import openfl.Assets;
 /**
  * ...
  * @author butin
@@ -41,7 +43,7 @@ class YourGame extends  Game
 		
 		var bitmapData : BitmapData = new BitmapData(100, 100, false,0xFF0000);
 		var image : Image = new Image(new Texture(bitmapData), 0);
-		image.x = 200;
+		image.x = -40;
 		image.y = 200;
 		image.alpha = 0.5;
 		addChild(image);
@@ -60,6 +62,8 @@ class YourGame extends  Game
 		stage.addEventListener(KeyboardEvent.KEY_DOWN, onKeyDown);
 		stage.addEventListener (Event.ENTER_FRAME, this_onEnterFrame);
 		stage.addEventListener (KeyboardEvent.KEY_UP, stage_onKeyUp);
+		stage.addEventListener (MouseEvent.CLICK, stage_MouseClick);
+	
 	}
 	
 	public var zoomIn : Bool;
@@ -91,32 +95,44 @@ class YourGame extends  Game
 	}
 	
 	private var mN : Int = 0;
-	private function stage_onKeyUp (event:KeyboardEvent):Void {
+	private function stage_onKeyUp (event:Event):Void {
 		zoomOut = false;
 		zoomIn = false;
 		
-		if ( event.keyCode == Keyboard.SPACE )
-		{
-					for(i in 0...500)
-					{
-						var frames : Array<Texture> = Starling.sCurrent.resources.getSequenceFrame("rada","Rada");
-						var mc : MovieClips = new MovieClips(frames,30);
-						mc.x =  Math.random()*gameWidth;
-						mc.y = Math.random()*gameHeight + 20;
-						addChild(mc);
-						Starling.sCurrent.juggler.add(mc);
-						
+					//for(i in 0...500)
+					//{
+						//var frames : Array<Texture> = Starling.sCurrent.resources.getSequenceFrame("rada","Rada");
+						//var mc : MovieClips = new MovieClips(frames,30);
+						//mc.x =  Math.random()*gameWidth;
+						//mc.y = Math.random()*gameHeight + 20;
+						//addChild(mc);
+						//Starling.sCurrent.juggler.add(mc);
+						//
 						//var mc : Image = new Image(Starling.sCurrent.resources.getFrame("rada", "Rada0001"));
 						//mc.x =  Math.random()*gameWidth;
 						//mc.y = Math.random()*gameHeight+ 20;
 						//addChild(mc);
+//
+					//
+					//
+					//}
+					//mN += 500;
+					//mNum.text = Std.string(mN);
 
-					
-					
-					}
-					mN += 500;
-					mNum.text = Std.string(mN);
-		}
+	}
+	
+	public function stage_MouseClick(e:Event)
+	{
+			var lasttime : Int = Lib.getTimer() ;
+		
+
+			var bitmap2 = new Bitmap (Assets.getBitmapData ("images_sd/image 1.png"));
+			bitmap2.y = 80;
+			bitmap2.scaleX = 1/2.25;
+			bitmap2.scaleY = 1/2.25;
+			addChild (bitmap2);
+			
+			mTxt.text = Std.string(Lib.getTimer() - lasttime );
 	}
 	
 }

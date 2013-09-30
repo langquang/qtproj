@@ -34,7 +34,9 @@ class Image extends Sprite
 		{
 			mTexture = texture;
 			mBitmap = new Bitmap();
-			mBitmap.bitmapData = mTexture.mBitmapData;
+			mBitmap.bitmapData = new BitmapData(mTexture.mBitmapData.width, mTexture.mBitmapData.height, true, 0);
+			updateRender(mTexture.mBitmapData);
+			//mBitmap.bitmapData = mTexture.mBitmapData;
 			mBitmap.smoothing = true;
 			addChild(mBitmap);
 			mAlign = align;
@@ -44,7 +46,7 @@ class Image extends Sprite
 			throw("Texture cannot be null");
 		}
 		var gameScale : Float = Starling.sCurrent.mGameScale;
-		scaleX = scaleY = 1 / gameScale;
+		mBitmap.scaleX = mBitmap.scaleY = 1 / gameScale;
 	}
 	
 	public function get_texture():Texture { return mTexture; }
@@ -101,6 +103,13 @@ class Image extends Sprite
 		mBitmap.x -= mAlignX;
 		mBitmap.y -= mAlignY;
 		return value;
+	}
+	
+	public function updateRender(bmdata : BitmapData):Void
+	{
+
+		mBitmap.bitmapData .fillRect (bmdata.rect, 0);
+		mBitmap.bitmapData.draw(bmdata);
 	}
 	
 }
