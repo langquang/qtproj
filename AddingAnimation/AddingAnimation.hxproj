@@ -6,8 +6,8 @@
     <movie input="" />
     <movie path="project.xml" />
     <movie fps="100" />
-    <movie width="800" />
-    <movie height="600" />
+    <movie width="960" />
+    <movie height="540" />
     <movie version="3" />
     <movie minorVersion="0" />
     <movie platform="NME" />
@@ -21,9 +21,9 @@
   <!-- Build options -->
   <build>
     <option directives="tools=1&#xA;openfl_ver=1.0.7&#xA;openfl&#xA;display&#xA;web" />
-    <option flashStrict="False" />
+    <option flashStrict="True" />
     <option mainClass="ApplicationMain" />
-    <option enabledebug="False" />
+    <option enabledebug="True" />
     <option additional="--no-output&#xA;-swf-version 11&#xA;#--remap nme:flash" />
   </build>
   <!-- haxelib libraries -->
