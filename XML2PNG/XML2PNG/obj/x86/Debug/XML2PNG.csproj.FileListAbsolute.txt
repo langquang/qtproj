@@ -1,0 +1,5 @@
+E:\Work\LocalTools\XML2PNG\XML2PNG\bin\Debug\XML2PNG.exe
+E:\Work\LocalTools\XML2PNG\XML2PNG\bin\Debug\XML2PNG.pdb
+E:\Work\LocalTools\XML2PNG\XML2PNG\obj\x86\Debug\XML2PNG.exe
+E:\Work\LocalTools\XML2PNG\XML2PNG\obj\x86\Debug\XML2PNG.pdb
+E:\Work\LocalTools\XML2PNG\XML2PNG\obj\x86\Debug\XML2PNG.csprojResolveAssemblyReference.cache
