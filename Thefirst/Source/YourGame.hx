@@ -29,6 +29,7 @@ import qtframework.texts.QTTextAlign;
 import qtframework.texts.QTTextField;
 import openfl.Assets;
 import qtframework.utils.Util;
+import qtframework.resources.TextBin;
 
 /**
  * ...
@@ -62,36 +63,13 @@ class YourGame extends  Game
 		
 		Starling.sCurrent.texts.loadData();
 		
-		var font:QTBitmapFont = new QTBitmapFont().loadPixelizer(Assets.getBitmapData("images_hd/fontData10pt.png"), " !\"#$%&'()*+,-./" + "0123456789:;<=>?" + "@ABCDEFGHIJKLMNO" + "PQRSTUVWXYZ[]^_" + "abcdefghijklmno" + "pqrstuvwxyz{|}~\\");
-		
-		var content = Assets.getBytes("images_hd/vn.fnt");
-		var textBytes : String = content.toString();
-		
-		//var str : String = Starling.sCurrent.texts.getText("text1");
-		var str : String  = "11111111";
-		trace(str.length);
+		var font:QTBitmapFont = Starling.sCurrent.texts.createPixelizerFont("fontData10pt", " !\"#$%&'()*+,-./" + "0123456789:;<=>?" + "@ABCDEFGHIJKLMNO" + "PQRSTUVWXYZ[]^_" + "abcdefghijklmno" + "pqrstuvwxyz{|}~\\");
+		var font2:QTBitmapFont = Starling.sCurrent.texts.createAngleCodeFont("vn");
+		Starling.sCurrent.texts.registerFont('asc2', font);
+		Starling.sCurrent.texts.registerFont('unicode', font2);
 		
 		
-		var XMLData = Xml.parse(textBytes);
-		var font2:QTBitmapFont = new QTBitmapFont().loadAngelCode(Assets.getBitmapData("images_hd/vn.png"), XMLData);
-		
-		var tf : QTTextField = new QTTextField(font2);
-		tf.scaleX = 1 / Starling.sCurrent.mGameScale;
-		tf.scaleY = 1 / Starling.sCurrent.mGameScale;
-		tf.x = gameWidth / 2;
-		addChild(tf); // I don't add this component to display list as you can see
-
-	
-		tf.text =  str;
-		tf.color = 0x0000ff;
-		tf.background = true;
-		tf.fixedWidth = false;
-		tf.multiLine = true;
-		tf.alignment = QTTextAlign.CENTER;
-		tf.lineSpacing = 5;
-
-		
-
+		addEventListener(MouseEvent.CLICK, onKeyDown);
 	}
 	
 	private function onDownloaded( e : QTEvent):Void
@@ -102,6 +80,24 @@ class YourGame extends  Game
 		m_MenuState = new MenuState();
 		addChild(m_MenuState);
 		
+	}
+	
+	private function onKeyDown(e : Event):Void
+	{
+			for ( i in 0...50 )
+			{
+				var tf : QTTextField = new QTTextField(Starling.sCurrent.texts.getFont('unicode') );
+				tf.x = gameWidth * Math.random();
+				tf.y = gameHeight  * Math.random();
+				tf.color = 0x0000ff;
+				//tf.background = true;
+				tf.fixedWidth = false;
+				tf.multiLine = true;
+				tf.alignment = QTTextAlign.CENTER;
+				tf.lineSpacing = 5;
+				tf.text =  Starling.sCurrent.texts.getText("text1");
+				addChild(tf);
+			}
 	}
 	
 

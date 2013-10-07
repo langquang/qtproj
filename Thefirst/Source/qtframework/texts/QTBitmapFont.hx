@@ -8,7 +8,7 @@ import flash.geom.ColorTransform;
 import flash.geom.Matrix;
 import flash.geom.Point;
 import flash.geom.Rectangle;
-
+import flash.utils.ByteArray;
 #if (cpp || neko)
 import openfl.display.Tilesheet;
 #end
@@ -104,10 +104,10 @@ class QTBitmapFont
 	/**
 	 * Loads font data in AngelCode's format
 	 * @param	pBitmapData	font image source
-	 * @param	pXMLData	font data in XML format
+	 * @param	buff	font data in ByteArray format
 	 * @return				this font
 	 */
-	public function loadAngelCode(pBitmapData:BitmapData, pXMLData:Xml):QTBitmapFont
+	public function loadAngelCode(pBitmapData:BitmapData, buff:ByteArray):QTBitmapFont
 	{
 		reset();
 		
@@ -120,46 +120,32 @@ class QTBitmapFont
 			var letterID:Int = 0;
 			var charCode:Int;
 			var charString:String;
+			var letter_height : Int;
+			var yoffset : Int;
 			
 			#if (cpp || neko)
 			_tileSheet = new Tilesheet(pBitmapData);
 			#end
-			
-			var chars:Xml = null;
-			for (node in pXMLData.elements())
+			var num_char : Int = buff.readShort();
+			var letterID : Int = 0;
+			while ( letterID < num_char )
 			{
-				if (node.nodeName == "font")
-				{
-					for (nodeChild in node.elements())
-					{
-						if (nodeChild.nodeName == "chars")
-						{
-							chars = nodeChild;
-							break;
-						}
-					}
-				}
-			}
-			
-			if (chars != null)
-			{
-				for (node in chars.elements())
-				{
-					if (node.nodeName == "char")
-					{
-						rect.x = Std.parseInt(node.get("x"));
-						rect.y = Std.parseInt(node.get("y"));
-						rect.width = Std.parseInt(node.get("width"));
-						rect.height = Std.parseInt(node.get("height"));
+						rect.x =  buff.readShort();	//x
+						rect.y =  buff.readShort(); //y
+						rect.width  =  buff.readByte();//width
+						letter_height = buff.readByte();//height
+						rect.height = letter_height;
 						
-						point.x = Std.parseInt(node.get("xoffset"));
-						point.y = Std.parseInt(node.get("yoffset"));
 						
-						charCode = Std.parseInt(node.get("id"));
+						point.x = buff.readByte();//xoffset
+						yoffset = buff.readByte();//yoffset
+						point.y = yoffset;
+						
+						charCode = buff.readShort();//id
 						charString = String.fromCharCode(charCode);
 						_glyphString += charString;
 						
-						var xadvance:Int = Std.parseInt(node.get("xadvance"));
+						var xadvance:Int = buff.readByte();//xadvance
 						var charWidth:Int = xadvance;
 						
 						if (rect.width > xadvance)
@@ -173,7 +159,7 @@ class QTBitmapFont
 						bd = null;
 						if (charString != " " && charString != "")
 						{
-							bd = new BitmapData(charWidth, Std.parseInt(node.get("height")) + Std.parseInt(node.get("yoffset")), true, 0x0);
+							bd = new BitmapData(charWidth, letter_height+ yoffset, true, 0x0);
 						}
 						else
 						{
@@ -195,8 +181,6 @@ class QTBitmapFont
 						#end
 						
 						letterID++;
-					}
-				}
 			}
 		}
 		
@@ -535,6 +519,7 @@ class QTBitmapFont
 	 */
 	public function drawText(graphics:Graphics, drawData:Array<Float>):Void
 	{
+		trace(drawData.length);
 		_tileSheet.drawTiles(graphics, drawData, false, _flags);
 	}
 	#end
@@ -549,13 +534,16 @@ class QTBitmapFont
 	public function getTextWidth(pText:String, ?pLetterSpacing:Int = 0, ?pFontScale:Float = 1.0):Int 
 	{
 		var w:Int = 0;
-		
+#if (flash || js)		
 		var textLength:Int = pText.length;
+#else
+		var textLength:Int = Utf8.length(pText);
+#end
 		for (i in 0...(textLength)) 
 		{
-			var charCode:Int = pText.charCodeAt(i);
-			trace("char:" + Std.string(charCode));
+			
 			#if (flash || js)
+			var charCode:Int = pText.charCodeAt(i);
 			var glyph:BitmapData = _glyphs[charCode];
 			if (glyph != null) 
 			{
@@ -563,6 +551,7 @@ class QTBitmapFont
 				w += glyph.width;
 			}
 			#else
+			var charCode:Int = Utf8.charCodeAt(pText,i);
 			if (_glyphs.exists(charCode)) 
 			{
 				

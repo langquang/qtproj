@@ -49,7 +49,7 @@ class Starling extends EventDispatcher
 		mNativeStage.addChild(mMainGame);
 		mainGame.checkdevice();
 		
-		m_Texts = new TextBin();
+		m_Texts = new TextBin(ResourceManager.HD);
 
 		
 
