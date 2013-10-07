@@ -6,6 +6,7 @@ import flash.display.Graphics;
 import flash.display.Sprite;
 import flash.geom.Matrix;
 import qtframework.texts.QTBitmapFont;
+import qtframework.qtcore.Starling;
 
 /**
  * Renders a text field.
@@ -59,7 +60,7 @@ class QTTextField extends Sprite
 	 * Constructs a new text field component.
 	 * @param pFont	optional parameter for component's font prop
 	 */
-	public function new(?pFont:QTBitmapFont = null) 
+	public function new(?pFont:QTBitmapFont = null, default_scale : Bool = true) 
 	{
 		super();
 		
@@ -114,6 +115,11 @@ class QTTextField extends Sprite
 		#end
 		
 		_pendingTextChange = true;
+		if ( default_scale )
+		{
+			scaleX = 1 / Starling.sCurrent.mGameScale;
+			scaleY = 1 / Starling.sCurrent.mGameScale;
+		}
 		update();
 	}
 	
