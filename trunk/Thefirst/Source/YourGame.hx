@@ -7,6 +7,7 @@ import flash.Vector.Vector;
 import flash.events.TouchEvent;
 import flash.events.MouseEvent;
 import game.states.BaseState;
+import game.states.GamePlayState;
 import game.states.LoadingState;
 import game.states.MenuState;
 import game.Wolverine;
@@ -40,7 +41,7 @@ class YourGame extends  Game
 
 	private var m_LoadingState : LoadingState;
 	private var m_MenuState : MenuState;
-	//private var m_PlayState : LoadingState;
+	private var m_PlayState : GamePlayState;
 	//private var m_EndState : LoadingState;
 
 
@@ -57,29 +58,41 @@ class YourGame extends  Game
 	
 	override public function gameInit():Void
 	{
-		//m_LoadingState = new LoadingState();
-		//m_LoadingState.addEventListener(QTEvent.DOWNLOAD_COMPLETE, onDownloaded);
-		//addChild(m_LoadingState);
-		
-		Starling.sCurrent.texts.loadData();
-		
-		var font:QTBitmapFont = Starling.sCurrent.texts.createPixelizerFont("fontData10pt", " !\"#$%&'()*+,-./" + "0123456789:;<=>?" + "@ABCDEFGHIJKLMNO" + "PQRSTUVWXYZ[]^_" + "abcdefghijklmno" + "pqrstuvwxyz{|}~\\");
-		var font2:QTBitmapFont = Starling.sCurrent.texts.createAngleCodeFont("vn");
-		Starling.sCurrent.texts.registerFont('asc2', font);
-		Starling.sCurrent.texts.registerFont('unicode', font2);
-		
-		
-		addEventListener(MouseEvent.CLICK, onKeyDown);
+		m_LoadingState = new LoadingState();
+		m_LoadingState.addEventListener(QTEvent.DOWNLOAD_COMPLETE, onRunMenu);
+		addChild(m_LoadingState);
 	}
 	
-	private function onDownloaded( e : QTEvent):Void
+	override public function calculateQuality():String
+	{
+		#if p770
+			return Version.P770;
+		#else
+			return Version.HD;
+		#end
+	}
+	
+	private function onRunMenu( e : QTEvent):Void
 	{
 		removeChild(m_LoadingState);
+		m_LoadingState.removeEventListener(QTEvent.DOWNLOAD_COMPLETE, onRunMenu);
 		m_LoadingState.dispose();
 		m_LoadingState = null;
 		m_MenuState = new MenuState();
+		m_MenuState.addEventListener(QTEvent.DOWNLOAD_COMPLETE, onRunGamePlay);
 		addChild(m_MenuState);
 		
+	}
+	
+	private function onRunGamePlay( e : QTEvent):Void
+	{
+		removeChild(m_MenuState);
+		m_MenuState.removeEventListener(QTEvent.DOWNLOAD_COMPLETE, onRunGamePlay);
+		m_MenuState.dispose();
+		m_MenuState = null;
+		m_PlayState = new GamePlayState();
+		//m_PlayState.addEventListener(QTEvent.DOWNLOAD_COMPLETE, onRunGamePlay);
+		addChild(m_PlayState);
 	}
 	
 	private function onKeyDown(e : Event):Void

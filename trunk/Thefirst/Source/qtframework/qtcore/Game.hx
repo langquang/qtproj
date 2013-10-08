@@ -131,6 +131,7 @@ class Game extends Sprite
 		Lib.current.stage.addChild(mDebugContainer);
 	}
 	
+	/** show FPS/Mem*/
 	public function showStats( value : Bool ):Void
 	{
 		if ( value == true )
@@ -146,6 +147,12 @@ class Game extends Sprite
 			removeChild(mStats);
 			mStats = null;	
 		}
+	}
+	
+	/** must override for calculateQuality function*/
+	public function calculateQuality():String
+	{
+		return "_hd";
 	}
 	
 	

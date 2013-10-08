@@ -36,7 +36,12 @@ class Main extends Sprite {
 		return (orientation == Stage.OrientationLandscapeLeft || orientation == Stage.OrientationLandscapeRight);
 		}	
 		#end
-		var mStarling : Starling =Starling.create(stage, new YourGame(614,407) );
+		
+		#if p770
+		var mStarling : Starling = Starling.create(stage, new YourGame(960, 540) );
+		#else
+		var mStarling : Starling = Starling.create(stage, new YourGame(614, 407) );
+		#end
 		mStarling.start();
 	}		
 }

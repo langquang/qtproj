@@ -6,14 +6,14 @@ import qtframework.qtanimation.IAnimatable;
 import qtframework.qtcore.Starling;
 import qtframework.defines.DisplayAlign;
 import qtframework.events.QTEvent;
-
+import qtframework.texts.QTBitmapFont;
 /**
  * ...
  * @author butin
  */
 class LoadingState  extends BaseState implements IAnimatable
 {
-	private var m_timeLife : Float = 5; // second
+	private var m_timeLife : Float = 1; // second
 	private var m_logoImg : Image;
 	private var m_loadingImg : Image;
 	public function new() 
@@ -24,7 +24,7 @@ class LoadingState  extends BaseState implements IAnimatable
 	override public function initState():Void
 	{
 		super.initState();
-		m_background = new Image(Starling.sCurrent.resources.getFrame("splashscreen", "sketch1.png"));
+		m_background = new Image(Starling.sCurrent.resources.getFrame("splash", "lenovo770_splash.png"));
 		m_background.mAlign = DisplayAlign.CENTER;
 		m_background.x = Starling.sCurrent.mMainGame.gameWidth / 2;
 		m_background.y = Starling.sCurrent.mMainGame.gameHeight / 2;
@@ -69,11 +69,22 @@ class LoadingState  extends BaseState implements IAnimatable
 	private function loadData(param : Dynamic = null):Void
 	{
 		var beginTime : Float = Util.getSecond();
-		Starling.sCurrent.resources.loadPack("gui");
-		Starling.sCurrent.resources.loadPack("chacractor");
-		Starling.sCurrent.resources.loadPack("menu");
-		Starling.sCurrent.resources.loadPack("play");
-		Starling.sCurrent.resources.loadPack("endmenu");
+		
+		// load texts
+		Starling.sCurrent.texts.loadData();
+		// load bitmapfont
+		var font:QTBitmapFont = Starling.sCurrent.texts.createPixelizerFont("fontData10pt", " !\"#$%&'()*+,-./" + "0123456789:;<=>?" + "@ABCDEFGHIJKLMNO" + "PQRSTUVWXYZ[]^_" + "abcdefghijklmno" + "pqrstuvwxyz{|}~\\");
+		var font2:QTBitmapFont = Starling.sCurrent.texts.createAngleCodeFont("vn");
+		Starling.sCurrent.texts.registerFont('asc2', font);
+		Starling.sCurrent.texts.registerFont('unicode', font2);
+		// load graphic
+		Starling.sCurrent.resources.loadPack("Menu");
+		Starling.sCurrent.resources.loadPack("menu_bg");
+		Starling.sCurrent.resources.loadPack("menu_items");
+		Starling.sCurrent.resources.loadPack("zombie_boss");
+		Starling.sCurrent.resources.loadPack("end_game_bg");
+		Starling.sCurrent.resources.loadPack("end_game_items");
+		Starling.sCurrent.resources.loadPack("game_play_items");
 		var delayTime : Float = Util.getSecond()- beginTime;
 		if ( delayTime < m_timeLife ){
 			Starling.sCurrent.juggler.delayCall(onLoadDataComplete, m_timeLife - delayTime);

@@ -16,7 +16,7 @@ import qtframework.defines.DisplayAlign;
  */
 class Image extends Sprite
 {
-	private var mBitmap : Bitmap;
+	public var mBitmap(default, null) : Bitmap;
 	private var mTexture:Texture;
 	private var mFilterTexture : Texture;
 	public var texture(get_texture, set_texture):Texture;
