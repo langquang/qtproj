@@ -53,6 +53,7 @@ class QTButton extends Sprite
 		addEventListener(TouchEvent.TOUCH_ROLL_OUT, onMouseOut);
 		#end
 		
+		#if flash
 		m_hitTest = new Sprite();
 		m_hitTest.x = this.x + mDisplay.mBitmap.x;
 		m_hitTest.y = this.y + mDisplay.mBitmap.y;
@@ -63,8 +64,8 @@ class QTButton extends Sprite
 		m_hitTest.mouseEnabled = false;
 		m_hitTest.visible = false;
 		this.parent.addChild(m_hitTest);
-		
 		hitArea = m_hitTest;
+		#end
 	}
 	
 	private function onRemoveFromStage(e : Event):Void
