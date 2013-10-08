@@ -6,6 +6,7 @@ import flash.text.TextField;
 import flash.Vector.Vector;
 import flash.events.TouchEvent;
 import flash.events.MouseEvent;
+import flash.events.KeyboardEvent;
 import game.states.BaseState;
 import game.states.GamePlayState;
 import game.states.LoadingState;
@@ -54,6 +55,8 @@ class YourGame extends  Game
 		graphics.beginFill(0xffffff, 0.2);
 		graphics.drawRect(0, 0, gameWidth, gameHeight);
 		graphics.endFill();
+		
+		flash.Lib.current.stage.addEventListener (KeyboardEvent.KEY_UP, stage_onKeyUp);
 	}
 	
 	override public function gameInit():Void
@@ -95,22 +98,16 @@ class YourGame extends  Game
 		addChild(m_PlayState);
 	}
 	
-	private function onKeyDown(e : Event):Void
+	private function stage_onKeyUp(event : KeyboardEvent):Void
 	{
-			for ( i in 0...50 )
+		#if android
+			// exit game
+			if (event.keyCode == 27) 
 			{
-				var tf : QTTextField = new QTTextField(Starling.sCurrent.texts.getFont('unicode') );
-				tf.x = gameWidth * Math.random();
-				tf.y = gameHeight  * Math.random();
-				tf.color = 0x0000ff;
-				//tf.background = true;
-				tf.fixedWidth = false;
-				tf.multiLine = true;
-				tf.alignment = QTTextAlign.CENTER;
-				tf.lineSpacing = 5;
-				tf.text =  Starling.sCurrent.texts.getText("text1");
-				addChild(tf);
+				event.stopImmediatePropagation ();
+				flash.Lib.exit ();
 			}
+		#end
 	}
 	
 
