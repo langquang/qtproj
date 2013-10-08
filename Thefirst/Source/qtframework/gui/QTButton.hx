@@ -18,11 +18,14 @@ class QTButton extends Sprite
 {
 	private var mDisplay : Image;
 	public var mAniScale: Float;
+	private var m_hitTest : Sprite;
+	private var m_skin : Texture;
 	public function new(skin : Texture) 
 	{
 		super();
 		if (skin != null)
 		{
+			m_skin = skin;
 			mDisplay = new Image(skin);
 			mDisplay.mAlign = DisplayAlign.CENTER;
 			addChild(mDisplay);
@@ -49,6 +52,19 @@ class QTButton extends Sprite
 		addEventListener(TouchEvent.TOUCH_ROLL_OVER, onMouseOver);
 		addEventListener(TouchEvent.TOUCH_ROLL_OUT, onMouseOut);
 		#end
+		
+		m_hitTest = new Sprite();
+		m_hitTest.x = this.x + mDisplay.mBitmap.x;
+		m_hitTest.y = this.y + mDisplay.mBitmap.y;
+			
+		m_hitTest.graphics.beginFill(0xff0000,0.5);
+		m_hitTest.graphics.drawRect(0, 0, this.width, this.height);
+		m_hitTest.graphics.endFill();
+		m_hitTest.mouseEnabled = false;
+		m_hitTest.visible = false;
+		this.parent.addChild(m_hitTest);
+		
+		hitArea = m_hitTest;
 	}
 	
 	private function onRemoveFromStage(e : Event):Void

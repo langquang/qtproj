@@ -13,9 +13,27 @@ import flash.utils.ByteArray;
 import openfl.display.Tilesheet;
 #end
 
+//Starling.sCurrent.texts.loadData();
+//var font:QTBitmapFont = Starling.sCurrent.texts.createPixelizerFont("fontData10pt", " !\"#$%&'()*+,-./" + "0123456789:;<=>?" + "@ABCDEFGHIJKLMNO" + "PQRSTUVWXYZ[]^_" + "abcdefghijklmno" + "pqrstuvwxyz{|}~\\");
+//var font2:QTBitmapFont = Starling.sCurrent.texts.createAngleCodeFont("vn");
+//Starling.sCurrent.texts.registerFont('asc2', font);
+//Starling.sCurrent.texts.registerFont('unicode', font2);
+//var tf : QTTextField = new QTTextField(Starling.sCurrent.texts.getFont('unicode') );
+//tf.x = gameWidth * Math.random();
+//tf.y = gameHeight  * Math.random();
+//tf.color = 0x0000ff;
+//tf.background = true;
+//tf.fixedWidth = false;
+//tf.multiLine = true;
+//tf.alignment = QTTextAlign.CENTER;
+//tf.lineSpacing = 5;
+//tf.text =  Starling.sCurrent.texts.getText("text1");
+//addChild(tf);
+
 /**
  * Holds information and bitmap glpyhs for a bitmap font.
  * @author Johan Peitz
+ * 
  */
 class QTBitmapFont 
 {

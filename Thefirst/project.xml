@@ -11,9 +11,12 @@
 	<haxelib name="openfl" />
 	<haxelib name="actuate" />
 	
+	<haxedef name="p770" />
+	
 	<assets path="Assets/images/sd" rename="images_sd" include="*.png|*.jpg|*.bin" exclude="*.svg|*.xml|*.exe" />
 	<assets path="Assets/images/hd" rename="images_hd" include="*.png|*.jpg|*.bin|*.fnt" exclude="*.svg|*.xml|*.exe" />
 	<assets path="Assets/images/fullhd" rename="images_fullhd" include="*.png|*.jpg|*.bin" exclude="*.svg|*.xml|*.exe" />
+	<assets path="Assets/images/p770" rename="images_p770" include="*.png|*.jpg|*.bin" exclude="*.svg|*.xml|*.exe" />
 	<assets path="assets/texts" rename="texts" include="*.bin|*.xml" type="text" />
 	<assets path="assets/fonts" rename="fonts" include="*.ttf" />
 	<assets path="assets/sounds" rename="sounds" include="*.mp3" if="flash" />

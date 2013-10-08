@@ -36,8 +36,11 @@ class Starling extends EventDispatcher
 	 private var mStarted:Bool;   
 	 private var mLastFrameTimestamp : Float;
 	
+	 public var mQuanlity(default, null) : String;
+	 
 	public  static var sCurrent(get_sCurrent, null):Starling;
     private static var sHandleLostContext:Bool;
+	
 		
 	private function new( stage:Stage, mainGame: Game) 
 	{
@@ -45,18 +48,21 @@ class Starling extends EventDispatcher
 		if (stage == null) throw ("Stage must not be null");
 		
 		mNativeStage = stage;
+		//create your game instance
 		mMainGame = mainGame;
 		mNativeStage.addChild(mMainGame);
+		// caculate game_scale & quality
 		mainGame.checkdevice();
-		
-		m_Texts = new TextBin(ResourceManager.HD);
-
-		
-
+		// must override for calculateQuality function
+		mQuanlity = mainGame.calculateQuality();
+		// create test_pool
+		m_Texts = new TextBin(this.mQuanlity);
+		// create viewport
 		mViewPort = new Rectangle(0, 0, stage.stageWidth, stage.stageHeight);
-		
+		// create timer
 		mJuggler = new Juggler();
-		mResources = new ResourceManager(ResourceManager.HD);
+		// create resource manager
+		mResources = new ResourceManager(this.mQuanlity);
 		mLastFrameTimestamp = getSecond();
 		// register other event handlers
 		stage.addEventListener(Event.ENTER_FRAME, onEnterFrame);
