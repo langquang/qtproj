@@ -74,9 +74,11 @@ class LoadingState  extends BaseState implements IAnimatable
 		Starling.sCurrent.texts.loadData();
 		// load bitmapfont
 		var font:QTBitmapFont = Starling.sCurrent.texts.createPixelizerFont("fontData10pt", " !\"#$%&'()*+,-./" + "0123456789:;<=>?" + "@ABCDEFGHIJKLMNO" + "PQRSTUVWXYZ[]^_" + "abcdefghijklmno" + "pqrstuvwxyz{|}~\\");
-		var font2:QTBitmapFont = Starling.sCurrent.texts.createAngleCodeFont("vn");
+		var font2:QTBitmapFont = Starling.sCurrent.texts.createAngleCodeFont("damnnoisy");
+		var font3:QTBitmapFont = Starling.sCurrent.texts.createAngleCodeFont("vn");
 		Starling.sCurrent.texts.registerFont('asc2', font);
-		Starling.sCurrent.texts.registerFont('unicode', font2);
+		Starling.sCurrent.texts.registerFont('damnnoisy', font2);
+		Starling.sCurrent.texts.registerFont('vn', font3);
 		// load graphic
 		Starling.sCurrent.resources.loadPack("Menu");
 		Starling.sCurrent.resources.loadPack("menu_bg");

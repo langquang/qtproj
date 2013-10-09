@@ -6,6 +6,8 @@ import qtframework.gui.QTButton;
 import qtframework.qtanimation.IAnimatable;
 import qtframework.qtcore.Starling;
 import qtframework.defines.DisplayAlign;
+import qtframework.texts.QTBitmapFont;
+import qtframework.texts.QTTextField;
 import qtframework.utils.Util;
 
 /**
@@ -49,6 +51,17 @@ class GamePlayState  extends BaseState implements IAnimatable
 		m_btn_pause.x = 837;
 		m_btn_pause.y = 40 + m_btn_pause.height/2;
 		addChild(m_btn_pause);	
+		
+		var _font : QTBitmapFont = Starling.sCurrent.texts.getFont("damnnoisy");
+		var tf : QTTextField = new QTTextField(_font);
+		tf.x = 250;
+		tf.y = 250;
+		tf.text = "asddd0123456789";
+		tf.color = 0xff0000;
+		tf.fixedWidth = false;
+		tf.multiLine = true;
+		tf.lineSpacing = 5;
+		//addChild(tf);
 		
 	}
 	
