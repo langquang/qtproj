@@ -183,9 +183,13 @@ namespace XML2PNG
 		{
 			log(file.FullName);
 			writeFont(writer, file.FullName);
-			break;
+			string[] filenames = file.FullName.Split('\\');
+            string filename = filenames[filenames.Length - 1];
+			filenames = filename.Split('.');
+			filename = filenames[0];
+			write2Bin(stream, filename + ".bin");
 		}
-		write2Bin(stream, NAME_FONT_OUT_PUT);
+		
 	}
 
 	static public void writeFont(WagBinaryWriter writer, string filePath)
