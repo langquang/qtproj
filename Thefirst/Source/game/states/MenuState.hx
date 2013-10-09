@@ -4,10 +4,14 @@ import flash.events.MouseEvent;
 import qtframework.events.QTEvent;
 import qtframework.display.Image;
 import qtframework.gui.QTButton;
+import qtframework.gui.QTButtonText;
 import qtframework.qtanimation.IAnimatable;
 import qtframework.qtcore.Starling;
 import qtframework.defines.DisplayAlign;
+import qtframework.texts.QTBitmapFont;
+import qtframework.texts.QTTextField;
 import qtframework.utils.Util;
+import qtframework.texts.QTTextAlign;
 
 /**
  * ...
@@ -38,12 +42,12 @@ class MenuState  extends BaseState implements IAnimatable
 		m_background.y = Starling.sCurrent.mMainGame.gameHeight / 2;
 		addChild(m_background);
 		
-		m_btn_hight_score = new QTButton( Starling.sCurrent.resources.getFrame("Menu", "btn_hight_score") );
+		m_btn_hight_score = new QTButtonText( Starling.sCurrent.resources.getFrame("Menu", "btn_hight_score") , 10);
 		m_btn_hight_score.x = 170;
 		m_btn_hight_score.y = 350;
 		addChild(m_btn_hight_score);
 		
-		m_btn_music = new QTButton( Starling.sCurrent.resources.getFrame("Menu", "btn_music") );
+		m_btn_music = new QTButtonText( Starling.sCurrent.resources.getFrame("Menu", "btn_music") , 20);
 		m_btn_music.x = 170;
 		m_btn_music.y = 470;
 		addChild(m_btn_music);		
@@ -53,7 +57,7 @@ class MenuState  extends BaseState implements IAnimatable
 		m_btn_about_us.y = 350;
 		addChild(m_btn_about_us);	
 		
-		m_btn_sound = new QTButton( Starling.sCurrent.resources.getFrame("Menu", "btn_sound") );
+		m_btn_sound = new QTButtonText( Starling.sCurrent.resources.getFrame("Menu", "btn_sound") , -30);
 		m_btn_sound.x = 785;
 		m_btn_sound.y = 470;
 		addChild(m_btn_sound);
@@ -62,7 +66,18 @@ class MenuState  extends BaseState implements IAnimatable
 		m_btn_play.x = Starling.sCurrent.mMainGame.gameWidth / 2;
 		m_btn_play.y = Starling.sCurrent.mMainGame.gameHeight - m_btn_play.height / 2 - 15;
 		m_btn_play.addEventListener(MouseEvent.CLICK, onBtnPlayClick);
-		addChild(m_btn_play);		
+		addChild(m_btn_play);	
+		
+		var _font : QTBitmapFont = Starling.sCurrent.texts.getFont("damnnoisy");
+		var tf : QTTextField = new QTTextField(_font);
+		tf.x = 250;
+		tf.y = 250;
+		tf.text = "asddd0123456789";
+		tf.color = 0xff0000;
+		tf.fixedWidth = false;
+		tf.multiLine = true;
+		tf.lineSpacing = 5;
+		//addChild(tf);
 		
 	}
 	
