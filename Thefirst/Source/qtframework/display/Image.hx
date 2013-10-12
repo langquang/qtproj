@@ -99,6 +99,11 @@ class Image extends Sprite
 			mAlignX = cast mTexture.mBitmapData.width >> 1;
 			mAlignY = cast mTexture.mBitmapData.height >> 1;
 		}
+		else
+		{
+			mAlignX = cast mTexture.mBitmapData.width >> 1;
+			mAlignY = cast mTexture.mBitmapData.height;
+		}
 		var frame:Rectangle = texture.mFrame;
 		mBitmap.x = frame != null ? frame.x : 0;
 		mBitmap.y = frame != null ? frame.y : 0;

@@ -58,12 +58,12 @@ class QTButton extends Sprite
 		m_hitTest.x = this.x + mDisplay.mBitmap.x;
 		m_hitTest.y = this.y + mDisplay.mBitmap.y;
 			
-		m_hitTest.graphics.beginFill(0xff0000,0.5);
+		m_hitTest.graphics.beginFill(0xff0000);
 		m_hitTest.graphics.drawRect(0, 0, this.width, this.height);
 		m_hitTest.graphics.endFill();
 		m_hitTest.mouseEnabled = false;
 		m_hitTest.visible = false;
-		this.parent.addChild(m_hitTest);
+		addChild(m_hitTest);
 		hitArea = m_hitTest;
 		#end
 	}
