@@ -7,6 +7,7 @@ import flash.Vector.Vector;
 import flash.events.TouchEvent;
 import flash.events.MouseEvent;
 import flash.events.KeyboardEvent;
+import game.entitys.EntityRip;
 import game.states.BaseState;
 import game.states.GamePlayState;
 import game.states.LoadingState;
@@ -32,12 +33,17 @@ import qtframework.texts.QTTextField;
 import openfl.Assets;
 import qtframework.utils.Util;
 import qtframework.resources.TextBin;
+import qtframework.defines.DisplayAlign;
+
+import motion.Actuate;
+import motion.easing.Quad;
+import motion.easing.Quint;
 
 /**
  * ...
  * @author butin
  */
-class YourGame extends  Game
+class YourGame extends  Game implements IAnimatable
 {
 
 	private var m_LoadingState : LoadingState;
@@ -61,10 +67,38 @@ class YourGame extends  Game
 	
 	override public function gameInit():Void
 	{
-		m_LoadingState = new LoadingState();
-		m_LoadingState.addEventListener(QTEvent.DOWNLOAD_COMPLETE, onRunMenu);
-		addChild(m_LoadingState);
+		//m_LoadingState = new LoadingState();
+		//m_LoadingState.addEventListener(QTEvent.DOWNLOAD_COMPLETE, onRunMenu);
+		//addChild(m_LoadingState);
+		
+
+		var gameplay : GamePlayState = new GamePlayState();
+		addChild(gameplay);
+		
+		var m_background  : Image = new Image(Starling.sCurrent.resources.getFrame("game_play_bg", "game_play_bg"));
+		m_background.mAlign = DisplayAlign.CENTER;
+		m_background.x = Starling.sCurrent.mMainGame.gameWidth / 2;
+		m_background.y = Starling.sCurrent.mMainGame.gameHeight / 2;
+		//addChild(m_background);
+		rip  = new EntityRip();
+		rip.x = gameWidth / 2;
+		rip.y = gameHeight / 2;
+		//addChild(rip);
+		
+		Starling.sCurrent.juggler.add(this);
 	}
+	
+	var m_time : Float = 0;
+	var rip : EntityRip  = null;
+	public function advanceTime(time:Float):Void
+	 {
+		 m_time += time;
+		 if (m_time > 1.5  && rip.isFree())
+			{
+				rip.setState(EntityRip.APPEAR);
+				m_time = 0;
+			}
+	 }
 	
 	override public function calculateQuality():String
 	{
