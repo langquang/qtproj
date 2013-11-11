@@ -87,6 +87,7 @@ class LoadingState  extends BaseState implements IAnimatable
 		Starling.sCurrent.resources.loadPack("end_game_bg");
 		Starling.sCurrent.resources.loadPack("end_game_items");
 		Starling.sCurrent.resources.loadPack("game_play_items");
+		Starling.sCurrent.resources.loadPack("fadeout");
 		var delayTime : Float = Util.getSecond()- beginTime;
 		if ( delayTime < m_timeLife ){
 			Starling.sCurrent.juggler.delayCall(onLoadDataComplete, m_timeLife - delayTime);

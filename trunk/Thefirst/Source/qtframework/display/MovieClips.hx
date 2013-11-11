@@ -31,11 +31,11 @@ class MovieClips extends Image implements IAnimatable
 
 	
 	 /** Creates a movie clip from the provided textures and with the specified default framerate.*/  
-	public function new(textures:Array<Texture>, fps:Float=12) 
+	public function new(textures:Array<Texture>, fps:Float=12, align : Int = 0) 
 	{
 		 if (textures.length > 0)
 		{
-			super(textures[0]);
+			super(textures[0],align);
 			init(textures, fps);
 		}
 		else

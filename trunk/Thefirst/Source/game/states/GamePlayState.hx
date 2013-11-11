@@ -28,6 +28,10 @@ class GamePlayState  extends BaseState implements IAnimatable
 	private var m_zombie_list : Vector<EntityRip>;
 	private var m_delay : Float = 0.5;
 	private var m_last_appear: Float = 0;
+	private var m_time_line : Array<Float>;
+	private var m_time_delay : Array<Float>;
+	private var m_type_rates : Array<Float>;
+	
 	public function new() 
 	{
 		super();
@@ -60,6 +64,11 @@ class GamePlayState  extends BaseState implements IAnimatable
 		addChild(m_btn_pause);			
 		
 		intZomebieList();
+		
+		m_timeLife = 0;
+		 m_time_line = [0,10,20,30,40,50];
+		m_time_delay = [1.5, 1.2 , 0.9, 0.7, 0.6, 0.5];
+		m_type_rates = [50,50];
 	}
 	
 	private function intZomebieList():Void
@@ -114,16 +123,26 @@ class GamePlayState  extends BaseState implements IAnimatable
 		super.onRemoveFromStage(e);
 	}
 	
+
+	
 	override public function advanceTime(passedTime:Float):Void
 	{
+		m_timeLife += passedTime;
+		for ( i in 0...7 )
+		{
+			if ( m_timeLife < m_time_line[i] )
+				m_delay = m_time_delay[i];
+		}
+		
 		m_last_appear += passedTime;
 		 if (m_last_appear > m_delay )
 		{
 			for ( i in 0...7)
 			{
-				var rip : EntityRip = m_zombie_list[getRandomZombie()];
+				var rip : EntityRip = m_zombie_list[getRandomZombieSlot()];
 				if ( rip.isFree() )
 				{
+					rip.setType(getRandomZomebieType());
 					rip.setState(EntityRip.APPEAR);
 					m_last_appear = 0;
 					return;
@@ -133,10 +152,15 @@ class GamePlayState  extends BaseState implements IAnimatable
 		}
 	}
 	
-	private function getRandomZombie():Int
+	private function getRandomZombieSlot():Int
 	{
 		var num : Int = Misc.randomRange(0, 700);
 		return num%7;
+	}
+	
+	private function getRandomZomebieType():Int
+	{
+		return Misc.randomArray(m_type_rates);
 	}
 	
 	
